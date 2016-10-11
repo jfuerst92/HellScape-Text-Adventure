@@ -41,7 +41,7 @@ def checkVerb(verb):
  
  #This function is not done. It will check which verb is being used, and branch of to one of the following functions accordingly. 
 def interprit(command[])
-    check = checkRight(command[0])
+    check = checkVerb(command[0])
     if (check == 0):
         print "Not a valid command...\n"
         return
