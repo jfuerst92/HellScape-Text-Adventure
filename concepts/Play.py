@@ -55,6 +55,8 @@ def interprit(command):
             look(command, words)
         elif (command[0] == "pick" or command[0] == "pickup"):
             pickup(command, words)
+        elif (command[0] == "drop"):
+            drop(command, words)
         
     return
             
@@ -148,9 +150,9 @@ def drop(command, words): #the player object should be passed into the construct
     tItem = command[1]
     #if player is trying to drop an item
     for item in items:
-         if (tItem == item):
+        if (tItem == item):
              #roomItems = player.getItems() #get the items in the players inventory.
-             print "You drop the " + item + ". This is placeholder text an item drop. This will call the player object to drop the item object into their inventory and add it to the room's 'inventory' \n"
+            print "You drop the " + item + ". This is placeholder text an item drop. This will call the player object to drop the item object into their inventory and add it to the room's 'inventory' \n"
             return
 #             for item2 in roomItems:
   #              if (command[1] == item2):
