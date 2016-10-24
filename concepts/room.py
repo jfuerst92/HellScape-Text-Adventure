@@ -17,41 +17,27 @@ class Room(object):
 		self.invItem = invItem
 		self.intItem = intItem
 	
-def readFile(room,fName):
-	with open(fName) as f:
-		f = f.read().splitlines()
-		
-	seg = [x for x in f if x and not x.strip().startswith('!')]
-	
-	room.name = seg[0]
-	room.longDesc = seg[1]
-	room.shortDesc = seg[2]
-	room.conn1 = seg[3]
-	room.conn2 = seg[4]
-	room.invItem = seg[5]
-	room.intItem = seg[6]
-	
-	
-def main():
-	roomArr = []
-	
-	roomArr.append(limboRoom = Room(" "," "," ",0,0," ", " "))
-	roomArr.append(lustRoom = Room(" "," "," ",0,0," ", " "))
-	roomArr.append(glutRoom = Room(" "," "," ",0,0," ", " "))
-	roomArr.append(greedRoom = Room(" "," "," ",0,0," ", " "))
-	roomArr.append(wrathRoom = Room(" "," "," ",0,0," ", " "))
-	roomArr.append(heresyRoom = Room(" "," "," ",0,0," ", " "))
-	roomArr.append(viRoom = Room(" "," "," ",0,0," ", " "))
-	roomArr.append(fraudRoom = Room(" "," "," ",0,0," ", " "))
-	roomArr.append(treachRoom = Room(" "," "," ",0,0," ", " "))
-	roomArr.append(centerRoom = Room(" "," "," ",0,0," ", " "))
-	
+def readFile():
 	fileArr = ["limboFile.txt","lustFile.txt","glutFile.txt","greedFile.txt","wrathFile.txt","heresyFile.txt",
 				   "viFile.txt","fraudFile.txt","treachFile.txt","centerFile.txt"]
-	
-	for x in roomArr:
-		readFile(roomArr[x],fileArr[x])
-	
-if __name__=="__main__": main()
+	roomList = []
+	initRooms(roomList)
+	for x in range(10):
+		tempFile = fileArr[x]
+		with open(tempFile) as f:
+			f = f.read().splitlines()
+		seg = [i for i in f if i and not i.strip().startswith('!')]
+		roomList[x].name = seg[0]
+		roomList[x].longDesc = seg[1]
+		roomList[x].shortDesc = seg[2]
+		roomList[x].conn1 = seg[3]
+		roomList[x].conn2 = seg[4]
+		roomList[x].invItem = seg[5]
+		roomList[x].intItem = seg[6]
+	return roomList
 		
+def initRooms(rooms):
+	for x in range(10):
+		tempRoom = Room(" "," "," ",0,0," ", " ")
+		rooms.append(tempRoom)
 	

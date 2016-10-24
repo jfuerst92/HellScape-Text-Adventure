@@ -1,8 +1,8 @@
-LIMBO
+Violence
 You have entered into Limbo, the outermost region of hell. Here you find those souls that did not sin and yet they cannot go to Paradise because they did not have proper faith. Behind you is the River Acheron that you travelled on and to get to Limbo and you standing on what appears to be jagged, grey rock. You see large mountains surrounding you but they are so far away that they appear grey. All around you groups of souls wander about aimlessly; some are crying desperately while others simply wail in terror. You see some souls standing by themselves with mostly distraught faces. To your north, you see a rocky path leading to a large cave entrance that appears to be a screaming mouth. To your west, you see another rocky path leading away and up to hill in the distance. Looking eastward, there is another rocky path leading to another smaller cave entrance
 All around you are desperate souls. Some yards away, you see an older, frail soul that is staring at you as if he wants to tell you something. There is also a group of souls to your left that appear to beckon you to come closer
-2
-3
+6
+8
 Homer
 Group of souls
 !
