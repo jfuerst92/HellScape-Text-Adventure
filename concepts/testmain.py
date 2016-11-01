@@ -10,7 +10,7 @@ def main():
 	listRooms = readFile()
 	userName = raw_input("Please enter a username: ")
 	user = Player(userName,1)
-	for x in range(10):
+	for x in range(15):
 		print listRooms[x].name
 		print listRooms[x].longDesc
 		print listRooms[x].shortDesc

@@ -19,10 +19,11 @@ class Room(object):
 	
 def readFile():
 	fileArr = ["limboFile.txt","lustFile.txt","glutFile.txt","greedFile.txt","wrathFile.txt","heresyFile.txt",
-				   "viFile.txt","fraudFile.txt","treachFile.txt","centerFile.txt"]
+				   "viFile.txt","fraudFile.txt","treachFile.txt","centerFile.txt", "caveFile.txt", "templeFile.txt",
+				   "tempFile3.txt", "tempFile4.txt", "tempFile5.txt"]
 	roomList = []
 	initRooms(roomList)
-	for x in range(10):
+	for x in range(15):
 		tempFile = fileArr[x]
 		with open(tempFile) as f:
 			f = f.read().splitlines()
@@ -37,7 +38,7 @@ def readFile():
 	return roomList
 		
 def initRooms(rooms):
-	for x in range(10):
+	for x in range(15):
 		tempRoom = Room(" "," "," ",0,0," ", " ")
 		rooms.append(tempRoom)
 	
