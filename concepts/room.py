@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#import item
+from item import *
 
 '''
 Very rough draft of room object. Getting
@@ -20,7 +20,7 @@ class Room(object):
 def readFile():
 	fileArr = ["limboFile.txt","lustFile.txt","glutFile.txt","greedFile.txt","wrathFile.txt","heresyFile.txt",
 				   "viFile.txt","fraudFile.txt","treachFile.txt","centerFile.txt", "caveFile.txt", "templeFile.txt",
-				   "tempFile3.txt", "tempFile4.txt", "tempFile5.txt"]
+				   "startRoom.txt", "tempFile4.txt", "tempFile5.txt"]
 	roomList = []
 	initRooms(roomList)
 	for x in range(15):
