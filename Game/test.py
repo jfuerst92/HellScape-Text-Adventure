@@ -16,6 +16,8 @@ from room import readFile
 ########################################CODE FROM PLAY.PY#####################################
 
 rooms = readFile()
+rooms.append(Room("Dia De Los Muertos","","",0,0, "muertos"))
+#rooms.append(Room("Dia De Los Mu","","",0,0, "muertos"))
 player = Player()
 #items = Item.getItemList()
 
@@ -29,12 +31,15 @@ key = Item("key", "An old, bronze, slightly bent key that looks to unlock a door
 rooms[6].items.append(key)
 torch = Item("torch", "At last! A way to see in this damnable darkness! But how long will it stay lit for?", 2)
 rooms[2].items.append(torch)
+hotSauce = Item("hotSauce", "bottle o' hot sauce", 10)
+rooms[10].items.append(hotSauce)
 items = []
 items.append(doru)
 items.append(scroll)
 items.append(relic)
 items.append(key)
 items.append(torch)
+items.append(hotSauce)
 
 
 reaper = Reaper(9, rooms)
@@ -113,7 +118,7 @@ def look(command, words):
     lookAt = ""
     if (words == 1):
         
-        return "room", rooms[player.curRoom].name
+        return "room", rooms[player.curRoom].fname
 		
     #if player is trying to look at a feature
     if (command[1] == "at"):
