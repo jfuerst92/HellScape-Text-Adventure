@@ -17,7 +17,11 @@ from room import readFile
 
 rooms = readFile()
 rooms.append(Room("Dia De Los Muertos","","",0,0, "muertos"))
-#rooms.append(Room("Dia De Los Mu","","",0,0, "muertos"))
+rooms.append(Room("Quiet Apartment","","",0,0, "z"))
+rooms.append(Room("Loud Banquet Hall","","",0,0, "valhala"))
+rooms.append(Room("Room with Other People", "", "", 0, 0, "noexit"))
+rooms.append(Room("Dark and Dusty Tomb", "", "", 0, 0, "egypt"))
+
 player = Player()
 #items = Item.getItemList()
 
@@ -33,6 +37,9 @@ torch = Item("torch", "At last! A way to see in this damnable darkness! But how 
 rooms[2].items.append(torch)
 hotSauce = Item("hotSauce", "bottle o' hot sauce", 10)
 rooms[10].items.append(hotSauce)
+brains = Item("brains","brains", 11)
+rooms[11].items.append(brains)
+
 items = []
 items.append(doru)
 items.append(scroll)
@@ -40,13 +47,18 @@ items.append(relic)
 items.append(key)
 items.append(torch)
 items.append(hotSauce)
+items.append(brains)
 
 #add features
 stall = Feature("stall", "", 10)
 grave = Feature("grave", "", 10)
+zdoor = Feature("zdoor", "", 11)
+zmirror = Feature("zmirror", "", 11)
 features = []
 features.append(stall)
 features.append(grave)
+features.append(zdoor)
+features.append(zmirror)
 
 reaper = Reaper(9, rooms)
 #The current game dictionary. It recognizes these words. 

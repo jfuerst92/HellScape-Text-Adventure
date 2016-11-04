@@ -1,3 +1,9 @@
    You find yourself standing in what appears to be a normal apartment unit.  You are standing in the entranceway to the apartment,
 and see a kitchen to your left, a living room straight ahead of you, and a wall with two closed doors on your right.
-     
+   The living room has all of the standard comforts of the modern living room.  There is a large, beige couch with its back to you.
+Opposite the couch is a large flatscreen TV sitting on a wooden table.  On the wall of the living room is a large antique mirror.
+The windows seem a bit heavily barred.  Perhaps this home is in a bad neighborhood.
+   The kitchen is dimly lit, but also appears rather normal, other than its state of disaray.  There are dishes and silverware 
+strewn about the tabletop.  There is a large, dark, liquid stain on the floor.  The rancid smell of rotting vegetables hits your 
+nose, but is not able to mask the smell of something quite appetizing.
+   You hear what sounds like wimpering coming from one of the doors to your right.
