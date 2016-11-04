@@ -16,7 +16,14 @@ class Room(object):
 		self.conn1 = conn1
 		self.conn2 = conn2
 		self.items = []
-	
+
+	def removeItem(self, item):
+		self.items.remove(item)	
+		
+	def addItem(self, item):
+		self.items.append(item)
+			
+			
 def readFile():
 	fileArr = ["limboFile.txt","lustFile.txt","glutFile.txt","greedFile.txt","wrathFile.txt","heresyFile.txt",
 				   "viFile.txt","fraudFile.txt","treachFile.txt","centerFile.txt"]
@@ -32,8 +39,8 @@ def readFile():
 		roomList[x].shortDesc = seg[2]
 		roomList[x].conn1 = seg[3]
 		roomList[x].conn2 = seg[4]
-		roomList[x].items.append(seg[5])
-		roomList[x].items.append(seg[6])
+		#roomList[x].items.append(seg[5])
+		#roomList[x].items.append(seg[6])
 		#get filename
 		index = fileArr[x].find("F")
 		roomList[x].fname = fileArr[x][0:index]

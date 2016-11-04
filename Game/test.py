@@ -50,7 +50,7 @@ features.append(grave)
 
 reaper = Reaper(9, rooms)
 #The current game dictionary. It recognizes these words. 
-verbs = ['look', 'touch', 'go', 'help', 'pull', 'use', 'pickup', 'pick', 'drop']
+verbs = ['look', 'touch', 'go', 'help', 'pull', 'use', 'pickup', 'pick', 'drop', 'inventory']
 
 
 #p1 = Player()  #the player object will be globally accessable to the play functions since they should be able to control and access everything
@@ -108,9 +108,25 @@ def interprit(command):
             return drop(command, words)
         elif (command[0] == "go"):
             return go(command, words)
+        elif (command[0] == "inventory"):
+            return inventory()
         
-    
-            
+ 
+#-------------------------------------------------------------------------------------------------------------------------------------------------------
+# Function: inventory
+# This function prints a list of the items in user inventory to screen.
+# User input: None
+#------------------------------------------------------------------------------------------------------------------------------------------------------ 
+def inventory():
+	invString = "Items currently in inventory:\n"
+	for item in player.getInventory():
+		invString += "      " + item.name + "\n"
+	#used for testing to see items in current room	
+	#invString += "ROOM INVENTORY:\n"
+	#for item in rooms[player.curRoom].items:
+	#	invString += "      " + item.name + "\n"
+	return "inventory", invString
+	
 #-------------------------------------------------------------------------------------------------------------------------------------------------------
 # Function: look
 # This function lets the user look at something.  By itself, it simply looks around the room, and the user gets a long description of the room they're in
@@ -144,7 +160,13 @@ def look(command, words):
             #print "You looked at the " + item.name + ". This is placeholder text for the item description. This will be contained in an item object that will have a get method to obtain the info"
                 #item.getDescription()#This function will display the description of the item. 
                 return "item", lookAt
-    return "error", "You look but you do not see this anywhere in the room."
+	
+    #if item is in inventory
+    for item in player.inventory:
+        if (lookAt == item.name):
+            return "item", lookAt
+			
+    return "error", "You look but you do not have that item or see this anywhere in the room."
     
     
 
@@ -157,8 +179,7 @@ def look(command, words):
 def pickup(command, words): #the player object should be passed into the constructor, so we can get their current room and it's features
     tItem = ""
     if (words == 1):
-        print "You must indicate an item to pick up\n"
-        return
+        return "error", "You must indicate an item to pick up"
     if (command[1] == "up"):
         tItem = command[2]
     else:
@@ -172,10 +193,9 @@ def pickup(command, words): #the player object should be passed into the constru
             if checkItemInRoom(item) == True:
                 player.addItem(item) #This function adds the item to the players inventory
                 rooms[player.curRoom].removeItem(item)
-                print "You pick up the " + item.name + " and put it away in your bag.\n"
-                return
-    print "You look but you do not see this item anywhere in the room.\n"
-    return
+                return "message",  "You pick up the " + item.name + " and put it away in your bag."
+    return "error", "You look but you do not see this item anywhere in the room."
+    
   
   
 #-------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -188,8 +208,7 @@ def pickup(command, words): #the player object should be passed into the constru
 def drop(command, words): #the player object should be passed into the constructor, so we can get their current room and it's features
     tItem = ""
     if (words == 1):
-        print "You must indicate an item to drop\n"
-        return
+        return "error", "You must indicate an item to drop"
     
     tItem = command[1]
     #if player is trying to drop an item
@@ -201,12 +220,13 @@ def drop(command, words): #the player object should be passed into the construct
             for item2 in playerItems:
                 if (command[1] == item2.name):
                    player.dropItem(item2) #This function should drop the item from the players inventory
-                   rooms[player.curRoom].addItem(item)
-                   print "You drop the " + item2.name + " on the floor\n"
+                   item2.curRoom = player.curRoom
+                   rooms[player.curRoom].addItem(item2)
+                   return "message", "You drop the " + item2.name + " on the floor"
                    #player.curRoom.dropEvent(item) #If dropping the item has some effect on the room, then this function would make that happen.
-                   return
-    print "You you do not have such an item do drop.\n"
-    return
+                  
+    return "error", "You you do not have such an item do drop."
+    
     
     
     
@@ -313,10 +333,41 @@ def printFile(fileName, printScreen, startY, startX, color, maxLength):
 			yOffset += 1
 
 def errorMessage(printScreen, message):
-	printScreen.addstr(18, 1, message, curses.color_pair(5))
+	printScreen.clear()
+	printScreen.addstr(1, 1, message, curses.color_pair(5))
 	printScreen.refresh()
 	
-def main(stdscr):		
+def message(textScreen, picScreen, message):
+	textScreen.clear()
+	textScreen.border(0)
+	textScreen.addstr(3, 1, message, curses.color_pair(4))
+	
+	picScreen.clear()
+	picScreen.border(0)
+	
+	textScreen.refresh()
+	picScreen.refresh()
+
+def printInventory(nameScreen, picScreen, textScreen, invString):
+		nameScreen.clear()
+		nameScreen.border(0)
+		nameScreen.addstr(1,1, "PLAYER INVENTORY", curses.color_pair(1))
+		
+		picScreen.clear()
+		picScreen.border(0)
+		
+		textScreen.clear()
+		textScreen.border(0)
+		textScreen.addstr(3,1, invString, curses.color_pair(4))
+		
+		nameScreen.refresh()
+		picScreen.refresh()
+		textScreen.refresh()
+		
+def main(stdscr):	
+	#cwd = current working directory.  Used to access .txt files for curses
+	cwd = os.getcwd()
+	
 	stdscr.clear()
 
 	curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
@@ -344,16 +395,22 @@ def main(stdscr):
 	picWin.addstr(5, 18, "ASCII pic here", curses.color_pair(2))
 
 	beginX = 0
-	beginY = 20
+	beginY = 17
 	height = 20
 	width = curses.COLS - 1
 	textWin = curses.newwin(height, width, beginY, beginX)
 	textWin.border(0)
 	textWin.addstr(10, curses.COLS / 2 - 5, "Enter your name", curses.color_pair(4))
 
+	beginX = 0
+	beginY = 37
+	height = 3
+	width = curses.COLS - 1
+	errorWin = curses.newwin(height, width, beginY, beginX)
+	
 	beginX = 2
-	beginY = 41
-	height = 10
+	beginY = 40
+	height = 3
 	width = curses.COLS - 3
 	inputWin = curses.newwin(height, width, beginY, beginX)
 	inputWin.border(0)
@@ -363,6 +420,7 @@ def main(stdscr):
 	picWin.refresh()
 	captionWin.refresh()
 	textWin.refresh()
+	errorWin.refresh()
 	inputWin.refresh()
 	
 	curses.echo()
@@ -384,10 +442,15 @@ def main(stdscr):
 	while value != "exit":
 	
 		if type == "error":
-			errorMessage(textWin, value)
+			errorMessage(errorWin, value)
+		
+		elif type == "message":
+			message(textWin, picWin, value)
+			
+		elif type == "inventory":
+			printInventory(captionWin, picWin, textWin, value)
 			
 		else:
-			cwd = os.getcwd()
 			name = str(cwd) + "/" + type + "Names/" + value + ".txt"
 			pic = str(cwd) + "/" + type + "Pics/" + value + ".txt"
 			text = str(cwd) + "/" + type + "Descriptions/" + value + ".txt"
@@ -427,6 +490,10 @@ def main(stdscr):
 		type, value = interprit(command)
 		curses.noecho()
 
+		#clear error screen message if any
+		errorWin.clear()
+		
+		errorWin.refresh()
 		stdscr.refresh()	
 		picWin.refresh()
 		captionWin.refresh()
