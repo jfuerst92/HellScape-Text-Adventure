@@ -41,13 +41,17 @@ items.append(key)
 items.append(torch)
 items.append(hotSauce)
 
+#add features
+stall = Feature("stall", "", 10)
+grave = Feature("grave", "", 10)
+features = []
+features.append(stall)
+features.append(grave)
 
 reaper = Reaper(9, rooms)
 #The current game dictionary. It recognizes these words. 
 verbs = ['look', 'touch', 'go', 'help', 'pull', 'use', 'pickup', 'pick', 'drop']
-#rooms = ['start', 'muertos', 'space', 'farm']
-#items = ['stick', 'gun', 'key']
-features = ['wall', 'door', 'lever', 'torch', 'statue']
+
 
 #p1 = Player()  #the player object will be globally accessable to the play functions since they should be able to control and access everything
 
@@ -125,18 +129,13 @@ def look(command, words):
         lookAt = command[2]
     else:
         lookAt = command[1]
-    """Not sure how features will work yet, like doors, bookshelves, levers etc.
+    
     for feature in features:
         if (lookAt == feature.name):
-             roomFeatures = rooms[player.curRoom].getFeatures() #get the features of the current room to look at.
-             #print "You looked at the " + feature + ". This is placeholder text for the feature description. This will be contained in a feature object that will have a get method to obtain the info"
-             
-             for feat in roomFeatures:
-                if (command[1] == feat.name):
-                    feature.getDescription() #This function will display the description of the feature. If features are objects, then this may have to be passed in somehow 
-                    return
+             if feature.room == player.curRoom:
+				return "feature", lookAt
     
-    """   
+
     #if player is trying to look at an item
     for item in items:
         if (lookAt == item.name):
@@ -217,19 +216,25 @@ def drop(command, words): #the player object should be passed into the construct
 # it works for now.
 #------------------------------------------------------------------------------------------------------------------------------------------------------
 def go(command, words): #the player object should be passed into the constructor, so we can get their current room and it's features
-    room = ""
-    if (words == 1):
-        return "error", "You must indicate a place to go\n"
+	room = ""
+	if (words == 1):
+		return "error", "You must indicate a place to go\n"
     
-    gRoom = command[1].lower()
+	goTo = command[1].lower()
     
-    i = 0
-    for i in range(len(rooms)):
-
-        if (gRoom == rooms[i].fname):
+	i = 0
+	for i in range(len(rooms)):
+		if (goTo == rooms[i].fname):
 			player.changeRooms(i) 
 			return "room", rooms[player.curRoom].fname
-    return "error", "That is not a place you can go"
+	
+	#added ability to 'go' to feature
+	for feature in features:
+		if (goTo == feature.name):
+			if feature.room == player.curRoom:
+				return "feature", goTo
+				
+	return "error", "That is not a place you can go"
    
    
 """
