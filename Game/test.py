@@ -62,7 +62,7 @@ features.append(zmirror)
 
 reaper = Reaper(9, rooms)
 #The current game dictionary. It recognizes these words. 
-verbs = ['look', 'touch', 'go', 'help', 'pull', 'use', 'pickup', 'pick', 'drop', 'inventory']
+verbs = ['look', 'touch', 'go', 'help', 'pull', 'use', 'pickup', 'pick', 'drop', 'combine']
 
 
 #p1 = Player()  #the player object will be globally accessable to the play functions since they should be able to control and access everything
@@ -102,7 +102,7 @@ def checkVerb(verb):
      
  #This function is not done. It will check which verb is being used, and branch of to one of the following functions accordingly.
  ##returns [type, value] where type is "error", "room", "item", or "feature" and value is the name or error message 
-def interprit(command):
+def interpret(command):
     words = 0
     for word in command:
         words += 1
@@ -120,8 +120,6 @@ def interprit(command):
             return drop(command, words)
         elif (command[0] == "go"):
             return go(command, words)
-        elif (command[0] == "inventory"):
-            return inventory()
         
  
 #-------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -151,13 +149,23 @@ def look(command, words):
     if (words == 1):
         
         return "room", rooms[player.curRoom].fname
-		
-    #if player is trying to look at a feature
+    
     if (command[1] == "at"):
         lookAt = command[2]
     else:
         lookAt = command[1]
     
+    if lookAt == "inventory":
+        invString = "Items currently in inventory:\n"
+        for item in player.getInventory():
+            invString += "      " + item.name + "\n"
+        #used for testing to see items in current room	
+        #invString += "ROOM INVENTORY:\n"
+        #for item in rooms[player.curRoom].items:
+        #	invString += "      " + item.name + "\n"
+        return "inventory", invString
+
+	#if player is trying to look at feature
     for feature in features:
         if (lookAt == feature.name):
              if feature.room == player.curRoom:
@@ -458,9 +466,9 @@ def main(stdscr):
 		
 		elif type == "message":
 			message(textWin, picWin, value)
-			
+
 		elif type == "inventory":
-			printInventory(captionWin, picWin, textWin, value)
+			printInventory(captionWin, picWin, textWin,value)
 			
 		else:
 			name = str(cwd) + "/" + type + "Names/" + value + ".txt"
@@ -499,12 +507,13 @@ def main(stdscr):
 			break
 		command = []
 		command = userInput.split()
-		type, value = interprit(command)
+		type, value = interpret(command)
 		curses.noecho()
 
 		#clear error screen message if any
 		errorWin.clear()
 		
+		#show changed windows
 		errorWin.refresh()
 		stdscr.refresh()	
 		picWin.refresh()

@@ -1,0 +1,84 @@
+project polka mid-term report
+Group Members:
+Osbaldo Esquivel
+Joseph Fuerst
+Christopher King
+
+
+########
+Overview
+########
+
+	At this point, our project has item, room, feature, and player classes.  These classes have fields and methods that allow these items to store the 
+gamestate- for example the player has an inventory list and methods for adding and removing items from the inventory as well as displaying the entire
+inventory.  Our next step is to add functions related to aid in enforcing the puzzle requirements of the game.  
+	We have an interpret function to parse the user's input and logic to implement the 'look', 'go', 'pick up', and 'drop' commands.  
+Right now, the only restriction on these functions is that only things in the room the user is in can be looked at or picked up and the only way to 
+acquire or go to an object is to directly type in its name (for instance 'go glut').  Our next step here will be to limit the user to moving to 
+adjacent rooms only if certain puzzle conditions are met, and add requirements for obtaining certain objects (based again on the puzzle structure of
+the room).  
+	Visually, we have the code to display rooms, items, and features by loading the associated name, description, and pic files from the relevant 
+directory and loading the file in the corresponding window.  There is also the capability to display strings directly to the windows, as seen in error
+messages and pick up/drop messages.  The next step here will be to work on improving the aesthetics of the windows and creating animations for specific 
+events.
+
+
+##########
+Highlights
+##########
+
+	In terms of game content, many of the rooms are still stubs an this time and we haven't added many of the items and features that we've thought of.
+Two of the rooms that are mostly complete are 'muertos' and 'z'.  The puzzle structure that will be eventually enforced is as follows:  the user is in 
+'muertos'.  After reading the room description, the user types 'look stall' and is taken to the 'stall' feature.  The user must have already acquired the 
+item 'goldCoin' (not yet created) and then they would be able to purchase the 'hotSauce' item (not sure on verb usage yet, may create a 'buy' verb for 
+this).  The 'hotSauce' would then be added to the player's inventory (simulated by 'pick up hotSauce' command).  The user could then type 'look grave' to 
+go to the 'grave' feature.  Dropping an item on the grave (signifying honoring your ancestors) informs the user that they can now travel to the next room.
+	The user then types 'go z' (room name will later be masked so that user will enter 'go nextRoom' or something similar).  The user reads the description
+of 'z' and can type 'go zmirror' (name will also be masked) to look in the mirror and discover they are a zombie.  The user can then type 'look zdoor' to
+open the door and scare the inhabitant to death.  The user can then type 'pick up brains' to add the dead man's brains to their inventory.  The user may 
+try to eat the brains by typing 'use brains' ('use' verb not fully implemented yet), but the console will respond with an error that 'seems like they're missing
+something'.  The user can then type 'combine hotSauce brains' ('combine' verb not implemented yet) which will allow the eat the brains which will open a new 
+room for the user to go to.
+
+
+############
+Instructions
+############
+
+No compilation necessary, run with 'python test.py' in folder 'Game'
+
+Start by entering a name for your character.
+
+After that, the following commands are available:
+'look' - look at the current room.
+'look <item>' - look at <item> if it is in the current room or in your inventory.  Else display an error message
+'look <feature>' - look at <feature> if it is in the current room.  Else display error message. 
+'look inventory' or 'look at inventory' - display the items in the player's inventory.
+
+'go <room>' - move player to <room> and display <room> on screen.  If <room> is not a room display error message.
+'go <feature>' - display <feature> if it is in the current room.  Else display error message.
+
+'pick <item>' or 'pick up <item>' - add <item> to player inventory and remove from room if it is in the current room.  Else display error message.
+
+'drop <item>' - remove <item> from the player's inventory and add it to the room's list of items.  If player does not have <item> display error message.
+			  - currently items dropped in a room won't be mentioned by the room, but the item can be looked at or picked up from the room it is dropped in.
+
+'exit' - quit the game.  Press any key afterward to exit program.
+
+Room Structure:
+'muertos': 	items: 'hotSauce' 		features: 'grave', 'stall'
+'z': 		items: 'brains' 		features: 'zmirror', 'zdoor'
+'valhala':
+'egypt':
+'noexit':
+'limbo': 	items: 'doru'
+'lust':
+'glut':		items: 'torch'
+'greed':	items: 'scroll'
+'wrath':	items: 'relic'
+'heresy':	
+'vi':
+'fraud':	items: 'key'
+'treach':
+'center':
+
