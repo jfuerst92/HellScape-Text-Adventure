@@ -44,6 +44,7 @@ room for the user to go to.
 ############
 Instructions
 ############
+Make sure console is in full screen mode.  Haven't added pix requirement yet.
 
 No compilation necessary, run with 'python test.py' in folder 'Game'
 
