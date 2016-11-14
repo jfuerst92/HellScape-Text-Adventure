@@ -11,7 +11,7 @@ from feature import Feature
 #from feature import getItemList
 from room import Room
 from room import readFile
-
+from thesaurus import validateWord
 
 ########################################CODE FROM PLAY.PY#####################################
 
@@ -64,6 +64,20 @@ reaper = Reaper(9, rooms)
 #The current game dictionary. It recognizes these words. 
 verbs = ['look', 'touch', 'go', 'help', 'pull', 'use', 'pickup', 'pick', 'drop', 'combine']
 
+######################################
+#Create dictionaries of items and verbs to use with thesaurus api
+######################################
+verbDic = []
+for verb in verbs:
+	newArr = []
+	newArr.append(verb)
+	verbDic.append(newArr)
+	
+itemDic = []
+for item in items:
+	newArr = []
+	newArr.append(item.name)
+	itemDic.append(newArr)
 
 #p1 = Player()  #the player object will be globally accessable to the play functions since they should be able to control and access everything
 
@@ -99,16 +113,24 @@ def checkVerb(verb):
             check = 1
             
     return check
-     
+ 
+def checkVerb2(userVerb, verbDic):
+	isASyn, index, temp = validateWord(verbDic, userVerb, "verb")
+	if isASyn:
+			verbs[index] = temp
+			return 1, verbs[index][0] 		#return 'base' verb
+	else:
+			return 0, None
+			
  #This function is not done. It will check which verb is being used, and branch of to one of the following functions accordingly.
  ##returns [type, value] where type is "error", "room", "item", or "feature" and value is the name or error message 
-def interpret(command):
+def interpret(command, verbDic):
     words = 0
     for word in command:
         words += 1
     if (words == 0):
         return "error", "You must want to do something..."
-    check = checkVerb(command[0])
+    check, command[0] = checkVerb2(command[0], verbDic)		#if user entered a synonym, replace command[0] with the 'base' verb
     if (check == 0):
         return  "error", "Not a valid command..."
     else:
@@ -507,7 +529,7 @@ def main(stdscr):
 			break
 		command = []
 		command = userInput.split()
-		type, value = interpret(command)
+		type, value = interpret(command, verbDic)
 		curses.noecho()
 
 		#clear error screen message if any
