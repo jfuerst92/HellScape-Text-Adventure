@@ -8,6 +8,7 @@ from player import Player
 from reaper import Reaper
 from item import Item
 from feature import Feature
+from feature import DoorFeature
 #from feature import getItemList
 from room import Room
 from room import readFile
@@ -54,15 +55,17 @@ stall = Feature("stall", "", 10)
 grave = Feature("grave", "", 10)
 zdoor = Feature("zdoor", "", 11)
 zmirror = Feature("zmirror", "", 11)
+testDoor = DoorFeature("oakdoor", "", 0, 2, False) #True for locked, false for unlocked. The key item will be used on the door to unlock it
 features = []
 features.append(stall)
 features.append(grave)
 features.append(zdoor)
 features.append(zmirror)
+features.append(testDoor)
 
 reaper = Reaper(9, rooms)
 #The current game dictionary. It recognizes these words. 
-verbs = ['look', 'touch', 'go', 'help', 'pull', 'use', 'pickup', 'pick', 'drop', 'combine']
+verbs = ['look', 'touch', 'go', 'help', 'pull', 'use', 'pickup', 'pick', 'drop', 'combine', 'inventory']
 
 ######################################
 #Create dictionaries of items and verbs to use with thesaurus api
@@ -86,6 +89,13 @@ for item in items:
 def checkItemInRoom(item):
     
     if item.curRoom == player.curRoom:
+        return True
+    else:
+        return False
+        
+def checkFeatInRoom(feat):
+    
+    if feat.room == player.curRoom:
         return True
     else:
         return False
@@ -142,7 +152,34 @@ def interpret(command, verbDic):
             return drop(command, words)
         elif (command[0] == "go"):
             return go(command, words)
+        elif (command[0] == "inventory"):
+            return inventory()
+        elif (command[0] == "help"):
+            return help()
+        elif (command[0] == "use"):
+            return use(command, words)
+        else:
+            return "error", "No implementation for this verb"   #This is only here because I keep forgetting to add each new verb here >_>
         
+ 
+#-------------------------------------------------------------------------------------------------------------------------------------------------------
+# Function: help
+# This function prints a list of the items in user inventory to screen.
+# User input: None
+#------------------------------------------------------------------------------------------------------------------------------------------------------ 
+def help():
+	helpString = ("Available commands by verb:\n"
+			+"look\n"
+            + "look at <item>"
+			+"pick up <item> / pickup <item>\n"
+			+"drop <item>\n"
+			+"go <room> (currently unfinished)\n"
+            +"inventory\n")
+	
+	
+	return "message", helpString
+ 
+ 
  
 #-------------------------------------------------------------------------------------------------------------------------------------------------------
 # Function: inventory
@@ -208,7 +245,7 @@ def look(command, words):
         if (lookAt == item.name):
             return "item", lookAt
 			
-    return "error", "You look but you do not have that item or see this anywhere in the room."
+    return "error", "You look but you do not see a " + lookAt + " anywhere in the room."
     
     
 
@@ -299,7 +336,7 @@ def go(command, words): #the player object should be passed into the constructor
 	return "error", "That is not a place you can go"
    
    
-"""
+
 #-------------------------------------------------------------------------------------------------------------------------------------------------------
 # Function: use
 # This function lets the player use things in the room. The player can attempt to use certain features of the room such as
@@ -312,18 +349,28 @@ def go(command, words): #the player object should be passed into the constructor
 #
 # User input: use <feature>, use <item>, use <item> on <feature>, use <item> on <item>
 #------------------------------------------------------------------------------------------------------------------------------------------------------
-def use(command[]): #the player object should be passed into the constructor, so we can get their current room and it's features
+def use(command, words): #the player object should be passed into the constructor, so we can get their current room and it's features
     #if player is trying to use a feature
-    for item in features:
-        if (command[1] == item):
-             roomFeatures = player.curRoom.getFeatures() #get the features of the current room to look at.
-             for feat in roomFeatures:
-                if (command[1] == feat):
-                   feature.use() #This function will probably perform some kind of action on the feature? pull a lever, turn a knob, open a door etc. If an item is unusable currently it would say so. For instance, a locked door would remain locked. An unlit torch on the wall would do nothing. you cant 'use' a wall etc.
-                    return
-            print "You look but you do not see this feature in the room\n"
+    tFeat = ""
+    for feat in features:
+        if (command[1] == feat.name):
+            tFeat = command[1]
+            
+            if checkFeatInRoom(feat):
+                #return "message",  "You can use the " + tFeat
+                if (feat.type == "door"):
+                    if (feat.locked == True):
+                        return "message",  "It's locked.. However you do notice a small keyhole. Surely there must be a key somewhere?"
+                    else: #player uses the door. they go to the new room
+                        player.changeRooms(feat.conn) 
+                        return "room", rooms[player.curRoom].fname
+                        
+             
+                   
+            return "error", "You look but you do not see this feature in the room\n"
     
     #if player is trying to use an item
+    """
     for item in items:
          if (command[1] == item):
              roomItems = player.curRoom.getItems() #get the items items in players inventory
@@ -356,7 +403,7 @@ def use(command[]): #the player object should be passed into the constructor, so
     else: #The player has entered something that is not in the game, they will never find it.
         print "You cannot find what you are looking for.\n"
 return
- """   
+  """
  
 ###############################END CODE FROM PLAY.PY#################################
 
@@ -546,4 +593,3 @@ def main(stdscr):
 	stdscr.getch()	
 
 wrapper(main)
-
