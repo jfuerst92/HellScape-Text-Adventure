@@ -152,6 +152,7 @@ def help():
 			+"pick up <item> / pickup <item>\n"
 			+"drop <item>\n"
 			+"go <room> (currently unfinished)\n"
+		      	+ "Use <feature> (unfinished. You can type use oakdoor in the first room and it should take you to a connecting room)"
             +"inventory\n")
 	
 	
