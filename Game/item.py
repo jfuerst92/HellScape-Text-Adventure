@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 class Item(object):
-    def __init__(self,name,desc, curRoom):
+    def __init__(self, type, name,desc, curRoom):
+        self.type = type
         self.name = name
         self.desc = desc
         self.curRoom = curRoom
