@@ -127,10 +127,18 @@ def checkVerb(verb):
 def checkVerb2(userVerb, verbDic):
 	isASyn, index, temp = validateWord(verbDic, userVerb, "verb")
 	if isASyn:
-			verbs[index] = temp
-			return 1, verbs[index][0] 		#return 'base' verb
+			verbDic[index] = temp
+			return 1, verbDic[index][0] 		#return 'base' verb
 	else:
 			return 0, None
+			
+def checkNount(userNoun, nounDic):
+	isASyn, index, temp = validateWord(nounDic, userNoun, "noun")
+	if isAsyn:
+		nounDic[index] = temp
+		return 1, nounDic[index][0]
+	else:
+		return 0, None
 			
  #This function is not done. It will check which verb is being used, and branch of to one of the following functions accordingly.
  ##returns [type, value] where type is "error", "room", "item", or "feature" and value is the name or error message 
