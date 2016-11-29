@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import room
+from room import *
 
 class Player(object):
 
