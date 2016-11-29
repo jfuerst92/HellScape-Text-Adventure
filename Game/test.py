@@ -9,6 +9,7 @@ from reaper import Reaper
 from item import Item
 from feature import Feature
 from feature import DoorFeature
+from feature import PuzzFeature
 #from feature import getItemList
 from room import Room
 from room import readFile
@@ -25,21 +26,30 @@ rooms.append(Room("Dark and Dusty Tomb", "", "", 0, 0, "egypt"))
 
 player = Player()
 #items = Item.getItemList()
-
-doru = Item("doru", "A sharp tipped spear sits firmly planted in the sternum of some demonic skeleton. If this spear killed such a monster, I may benefit by holding on to this.", 0)
+#Item(type, name, description, room)
+doru = Item("weapon", "doru", "A sharp tipped spear sits firmly planted in the sternum of some demonic skeleton. If this spear killed such a monster, I may benefit by holding on to this.", 0)
 rooms[0].items.append(doru)
-scroll = Item("scroll", "An old scroll that contains odd pictures and characters. It seems to hum with power. There is a spot with the outline of a hand...", 3)
+scroll = Item("tele", "scroll", "An old scroll that contains odd pictures and characters. It seems to hum with power. There is a spot with the outline of a hand...", 3)
 rooms[3].items.append(scroll)
-relic = Item("relic", "An small pendant with a vial containing the dry blood of a long-passed Saint. Perhaps it may repel what evil lurks here... ", 4)
+relic = Item("defense", "relic", "An small pendant with a vial containing the dry blood of a long-passed Saint. Perhaps it may repel what evil lurks here... ", 4)
 rooms[4].items.append(relic)
-key = Item("key", "An old, bronze, slightly bent key that looks to unlock a door somewhere. I'm not sure this would still fit even.", 6)
-rooms[6].items.append(key)
-torch = Item("torch", "At last! A way to see in this damnable darkness! But how long will it stay lit for?", 2)
-rooms[2].items.append(torch)
-hotSauce = Item("hotSauce", "bottle o' hot sauce", 10)
+key = Item("key", "key", "An old, bronze, slightly bent key that looks to unlock a door somewhere. I'm not sure this would even fit anymore.", 4)
+rooms[4].items.append(key)
+torch = Item("gem", "torch", "It's a lit torch, how long has this been burning?", 5)
+
+rooms[5].items.append(torch)
+hotSauce = Item("weapon", "hotSauce", "bottle o' hot sauce", 10)
 rooms[10].items.append(hotSauce)
-brains = Item("brains","brains", 11)
+brains = Item("junk", "brains","brains", 11)
 rooms[11].items.append(brains)
+
+gem1 = Item("gem", "ruby", "A large gem sits on the floor, covered in dust. Yet it still shines vibrantly, malevolently.", 5)
+rooms[5].items.append(gem1)
+gem2 = Item("gem", "sapphire", "A long forgotton sapphire jewel that is chipped on one end. It is blue, but it is of the darkest blues you've ever seen. ", 6)
+rooms[6].items.append(gem2)
+gem3 = Item("gem", "obsidian", "A black piece of obsidian hastily cut into a gemstone shape. It seems to suck the very light out of the air around it. .", 7)
+rooms[7].items.append(gem3)
+rooms[10].items.append(hotSauce)
 
 items = []
 items.append(doru)
@@ -56,16 +66,58 @@ grave = Feature("grave", "", 10)
 zdoor = Feature("zdoor", "", 11)
 zmirror = Feature("zmirror", "", 11)
 testDoor = DoorFeature("oakdoor", "", 0, 2, False) #True for locked, false for unlocked. The key item will be used on the door to unlock it
+testDoor2 = DoorFeature("oakdoor", "", 2, 0, False)
+holeInWall = DoorFeature("hole", "", 0, 4, False)
+holeInWall2 = DoorFeature("hole", "", 4, 0, False)
+
+
+#PLACEHOLDER DOORS TO FACILITATE MOVEMENT AROUND THE MAP#
+phDoor = DoorFeature("door1", "", 2, 3, False)
+phDoor2 = DoorFeature("door1", "", 3, 2, False)
+
+phDoor3 = DoorFeature("door2", "", 2, 1, False)
+phDoor4 = DoorFeature("door2", "", 1, 2, False)
+
+phDoor5 = DoorFeature("door3", "", 1, 5, False)
+phDoor6 = DoorFeature("door3", "", 5, 1, False)
+
+phDoor7 = DoorFeature("door4", "", 1, 6, False)
+phDoor8 = DoorFeature("door4", "", 6, 1, False)
+
+phDoor9 = DoorFeature("door5", "", 1, 7, False)
+phDoor10 = DoorFeature("door5", "", 7, 1, False)
+
+statue = PuzzFeature("statue", "", 3, 8)
+ladder = DoorFeature("ladder", "", 8, 3, False)
+
+#END PLACEHOLDER DOORS#
+
 features = []
 features.append(stall)
 features.append(grave)
 features.append(zdoor)
 features.append(zmirror)
 features.append(testDoor)
+features.append(testDoor2)
+features.append(holeInWall)
+features.append(holeInWall2)
 
-reaper = Reaper(9, rooms)
+features.append(phDoor)
+features.append(phDoor2)
+features.append(phDoor3)
+features.append(phDoor4)
+features.append(phDoor5)
+features.append(phDoor6)
+features.append(phDoor7)
+features.append(phDoor8)
+features.append(phDoor9)
+features.append(phDoor10)
+features.append(statue)
+features.append(ladder)
+
+reaper = Reaper(9)
 #The current game dictionary. It recognizes these words. 
-verbs = ['look', 'touch', 'go', 'help', 'pull', 'use', 'pickup', 'pick', 'drop', 'combine', 'inventory']
+verbs = ['look', 'touch', 'go', 'help', 'pull', 'use', 'pickup', 'pick', 'drop', 'combine', 'inventory', 'search', 'whatroom']
 
 ######################################
 #Create dictionaries of items and verbs to use with thesaurus api
@@ -85,7 +137,9 @@ for item in items:
 #p1 = Player()  #the player object will be globally accessable to the play functions since they should be able to control and access everything
 
 #
-
+def whatRoom():
+    return "message", "You are in room " + str(player.curRoom) + ".\n"
+    
 def checkItemInRoom(item):
     
     if item.curRoom == player.curRoom:
@@ -166,6 +220,10 @@ def interpret(command, verbDic):
             return help()
         elif (command[0] == "use"):
             return use(command, words)
+        elif (command[0] == "search"):
+            return search()
+        elif (command[0] == "whatroom"):
+            return whatRoom()
         else:
             return "error", "No implementation for this verb"   #This is only here because I keep forgetting to add each new verb here >_>
         
@@ -255,8 +313,23 @@ def look(command, words):
             return "item", lookAt
 			
     return "error", "You look but you do not see a " + lookAt + " anywhere in the room."
-    
-    
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------------
+# Function: search
+# This function has the player search the current room for items
+
+# User input: search 
+#------------------------------------------------------------------------------------------------------------------------------------------------------ 
+def search():     
+    message = "you notice something..\n"
+    for item in items:
+        if (item.curRoom ==player.curRoom):
+            message = message + "You see a " + item.name + " in this room.\n"
+            
+    for feat in features:
+        if (feat.room ==player.curRoom):
+            message = message + "You see a " + feat.name + " in this room.\n"       
+    return "message", message
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------
 # Function: pickup
@@ -358,7 +431,7 @@ def go(command, words): #the player object should be passed into the constructor
 #
 # User input: use <feature>, use <item>, use <item> on <feature>, use <item> on <item>
 #------------------------------------------------------------------------------------------------------------------------------------------------------
-def use(command, words): #the player object should be passed into the constructor, so we can get their current room and it's features
+def use(command, words): 
     #if player is trying to use a feature
     tFeat = ""
     for feat in features:
@@ -369,50 +442,62 @@ def use(command, words): #the player object should be passed into the constructo
                 #return "message",  "You can use the " + tFeat
                 if (feat.type == "door"):
                     if (feat.locked == True):
+                        for item in player.getInventory():
+                            if item.name == "key":
+                                player.changeRooms(feat.conn) #player has a key
+                                return "room", rooms[player.curRoom].fname
                         return "message",  "It's locked.. However you do notice a small keyhole. Surely there must be a key somewhere?"
                     else: #player uses the door. they go to the new room
                         player.changeRooms(feat.conn) 
                         return "room", rooms[player.curRoom].fname
-                        
-             
-                   
-            return "error", "You look but you do not see this feature in the room\n"
-    
-    #if player is trying to use an item
-    """
-    for item in items:
-         if (command[1] == item):
-             roomItems = player.curRoom.getItems() #get the items items in players inventory
-             for item2 in roomItems:
-                if (command[1] == item2):
-                    if (command[2] == "on"): #player is using an item on something else
-                        for item in items:
-                            if (command[3] == item):
-                                playerItems = player.getItems() #get the items in player's inventory.
-                                for item3 in playerItems:
-                                    if (command[3] == item3):
-                                    item3.uses(item1) #item1 is used on item 3
-                                    return
-                                
-                                roomFeatures = player.curRoom.getFeatures() #get the features of the current room to look at.
-                                for feat in roomFeatures:
-                                    if (command[3] == feat):
-                                        feat.uses(item1) #item 1 is used on the feature
-                                        return
-                                print "You look but you do not see this in the room\n"
-                                return
+                elif (feat.type == "puzz"):
+                    if (feat.slots > 0):
+                        return "message", "there are " + str(feat.slots) + " empty slots left."
                     else:
-                        player.curRoom.use(item) #use the item by itself? it has to have some kind of effect on the room, so the room object that the player is visiting would need to have a use function that changes the room based on the used item. A dark room would be lit up by a flashlight, etc.
-                        return
-                print "You do not have this item"
+                        player.changeRooms(feat.conn)
+                        return "message", "With the three gems inserted into the slots, the ground begins to shake and the statue moves, revealing a hidden passage underneath, which you enter.\n"
+                        
+    #if player is trying to use an item
     
-    if (command[1] == NULL): #player just wants to look around, so describe everything, what features, and what items are in the room
-        player.curRoom.getDescription()
-        return
-    else: #The player has entered something that is not in the game, they will never find it.
-        print "You cannot find what you are looking for.\n"
-return
-  """
+    for item in items:
+         if (command[1] == item.name):
+             tItem = command[1]
+             for item2 in player.getInventory():
+                if (tItem == item2.name):
+                    #return "message", "You use the " + item2.name + " in your inventory\n"
+                    if (len(command) > 2):
+                        if (command[2] == "on"): #player is using an item on something else
+                            for feat in features:
+                                if (command[3] ==feat.name):
+                                    if (feat.room == player.curRoom):
+                                        tFeat = command[3]
+                                        return useItem(item2, feat)
+                    else:
+                        return useItem(item2, None)
+             return "error", "You do not have such an item.\n"
+    return "error", "You cannot find what you are looking for.\n"
+
+
+def useItem(item, feature):
+
+    if (feature == None):
+        if (item.type == "weapon"):
+            if (reaper.curRoom == player.curRoom): #attack the reaper with your weapon if it is present
+                reaper.getAttacked()
+            else:
+                return "error", "There is nothing to attack"
+        elif (item.type == "defense"):
+            return "error", "You cannot use defensive items, their effect is passive"
+        else:
+            return "message", "You use the " + item.name + " . (not implemented)"
+            
+    if (item.type == "key" and feature.type == "door"):
+        feature.locked = False
+        return "message", "you insert the key into the lock and give it a firm twist, and you hear a click as the door opens.\n"
+    elif (item.type == "gem" and feature.type == "puzz"):
+        feature.insertGem(player, item)
+        return "message", "you insert the gem into one of the open slots on the statue, and it clicks in to place.\n"
+    return "error", "invalid action (or not yet  implemented)"
  
 ###############################END CODE FROM PLAY.PY#################################
 
