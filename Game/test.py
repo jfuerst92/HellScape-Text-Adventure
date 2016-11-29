@@ -9,6 +9,7 @@ from reaper import Reaper
 from item import Item
 from feature import Feature
 from feature import DoorFeature
+from feature import PuzzFeature
 #from feature import getItemList
 from room import Room
 from room import readFile
@@ -34,12 +35,21 @@ relic = Item("defense", "relic", "An small pendant with a vial containing the dr
 rooms[4].items.append(relic)
 key = Item("key", "key", "An old, bronze, slightly bent key that looks to unlock a door somewhere. I'm not sure this would even fit anymore.", 4)
 rooms[4].items.append(key)
-torch = Item("util", "torch", "It's a lit torch, how long has this been burning?", 2)
-rooms[2].items.append(torch)
+torch = Item("gem", "torch", "It's a lit torch, how long has this been burning?", 5)
+
+rooms[5].items.append(torch)
 hotSauce = Item("weapon", "hotSauce", "bottle o' hot sauce", 10)
 rooms[10].items.append(hotSauce)
 brains = Item("junk", "brains","brains", 11)
 rooms[11].items.append(brains)
+
+gem1 = Item("gem", "ruby", "A large gem sits on the floor, covered in dust. Yet it still shines vibrantly, malevolently.", 5)
+rooms[5].items.append(gem1)
+gem2 = Item("gem", "sapphire", "A long forgotton sapphire jewel that is chipped on one end. It is blue, but it is of the darkest blues you've ever seen. ", 6)
+rooms[6].items.append(gem2)
+gem3 = Item("gem", "obsidian", "A black piece of obsidian hastily cut into a gemstone shape. It seems to suck the very light out of the air around it. .", 7)
+rooms[7].items.append(gem3)
+rooms[10].items.append(hotSauce)
 
 items = []
 items.append(doru)
@@ -55,10 +65,33 @@ stall = Feature("stall", "", 10)
 grave = Feature("grave", "", 10)
 zdoor = Feature("zdoor", "", 11)
 zmirror = Feature("zmirror", "", 11)
-testDoor = DoorFeature("oakdoor", "", 0, 2, True) #True for locked, false for unlocked. The key item will be used on the door to unlock it
+testDoor = DoorFeature("oakdoor", "", 0, 2, False) #True for locked, false for unlocked. The key item will be used on the door to unlock it
 testDoor2 = DoorFeature("oakdoor", "", 2, 0, False)
 holeInWall = DoorFeature("hole", "", 0, 4, False)
 holeInWall2 = DoorFeature("hole", "", 4, 0, False)
+
+
+#PLACEHOLDER DOORS TO FACILITATE MOVEMENT AROUND THE MAP#
+phDoor = DoorFeature("door1", "", 2, 3, False)
+phDoor2 = DoorFeature("door1", "", 3, 2, False)
+
+phDoor3 = DoorFeature("door2", "", 2, 1, False)
+phDoor4 = DoorFeature("door2", "", 1, 2, False)
+
+phDoor5 = DoorFeature("door3", "", 1, 5, False)
+phDoor6 = DoorFeature("door3", "", 5, 1, False)
+
+phDoor7 = DoorFeature("door4", "", 1, 6, False)
+phDoor8 = DoorFeature("door4", "", 6, 1, False)
+
+phDoor9 = DoorFeature("door5", "", 1, 7, False)
+phDoor10 = DoorFeature("door5", "", 7, 1, False)
+
+statue = PuzzFeature("statue", "", 3, 8)
+ladder = DoorFeature("ladder", "", 8, 3, False)
+
+#END PLACEHOLDER DOORS#
+
 features = []
 features.append(stall)
 features.append(grave)
@@ -69,9 +102,22 @@ features.append(testDoor2)
 features.append(holeInWall)
 features.append(holeInWall2)
 
-reaper = Reaper(9, rooms)
+features.append(phDoor)
+features.append(phDoor2)
+features.append(phDoor3)
+features.append(phDoor4)
+features.append(phDoor5)
+features.append(phDoor6)
+features.append(phDoor7)
+features.append(phDoor8)
+features.append(phDoor9)
+features.append(phDoor10)
+features.append(statue)
+features.append(ladder)
+
+reaper = Reaper(9)
 #The current game dictionary. It recognizes these words. 
-verbs = ['look', 'touch', 'go', 'help', 'pull', 'use', 'pickup', 'pick', 'drop', 'combine', 'inventory', 'search']
+verbs = ['look', 'touch', 'go', 'help', 'pull', 'use', 'pickup', 'pick', 'drop', 'combine', 'inventory', 'search', 'whatroom']
 
 ######################################
 #Create dictionaries of items and verbs to use with thesaurus api
@@ -91,7 +137,9 @@ for item in items:
 #p1 = Player()  #the player object will be globally accessable to the play functions since they should be able to control and access everything
 
 #
-
+def whatRoom():
+    return "message", "You are in room " + str(player.curRoom) + ".\n"
+    
 def checkItemInRoom(item):
     
     if item.curRoom == player.curRoom:
@@ -166,6 +214,8 @@ def interpret(command, verbDic):
             return use(command, words)
         elif (command[0] == "search"):
             return search()
+        elif (command[0] == "whatroom"):
+            return whatRoom()
         else:
             return "error", "No implementation for this verb"   #This is only here because I keep forgetting to add each new verb here >_>
         
@@ -373,7 +423,7 @@ def go(command, words): #the player object should be passed into the constructor
 #
 # User input: use <feature>, use <item>, use <item> on <feature>, use <item> on <item>
 #------------------------------------------------------------------------------------------------------------------------------------------------------
-def use(command, words): #the player object should be passed into the constructor, so we can get their current room and it's features
+def use(command, words): 
     #if player is trying to use a feature
     tFeat = ""
     for feat in features:
@@ -392,7 +442,13 @@ def use(command, words): #the player object should be passed into the constructo
                     else: #player uses the door. they go to the new room
                         player.changeRooms(feat.conn) 
                         return "room", rooms[player.curRoom].fname
-                
+                elif (feat.type == "puzz"):
+                    if (feat.slots > 0):
+                        return "message", "there are " + str(feat.slots) + " empty slots left."
+                    else:
+                        player.changeRooms(feat.conn)
+                        return "message", "With the three gems inserted into the slots, the ground begins to shake and the statue moves, revealing a hidden passage underneath, which you enter.\n"
+                        
     #if player is trying to use an item
     
     for item in items:
@@ -418,7 +474,10 @@ def useItem(item, feature):
 
     if (feature == None):
         if (item.type == "weapon"):
-            return "error", "You must indicate something to attack"
+            if (reaper.curRoom == player.curRoom): #attack the reaper with your weapon if it is present
+                reaper.getAttacked()
+            else:
+                return "error", "There is nothing to attack"
         elif (item.type == "defense"):
             return "error", "You cannot use defensive items, their effect is passive"
         else:
@@ -427,6 +486,9 @@ def useItem(item, feature):
     if (item.type == "key" and feature.type == "door"):
         feature.locked = False
         return "message", "you insert the key into the lock and give it a firm twist, and you hear a click as the door opens.\n"
+    elif (item.type == "gem" and feature.type == "puzz"):
+        feature.insertGem(player, item)
+        return "message", "you insert the gem into one of the open slots on the statue, and it clicks in to place.\n"
     return "error", "invalid action (or not yet  implemented)"
  
 ###############################END CODE FROM PLAY.PY#################################
