@@ -59,6 +59,9 @@ items.append(key)
 items.append(torch)
 items.append(hotSauce)
 items.append(brains)
+items.append(gem1)
+items.append(gem2)
+items.append(gem3)
 
 #add features
 stall = Feature("stall", "", 10)
