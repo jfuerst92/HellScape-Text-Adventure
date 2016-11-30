@@ -570,7 +570,7 @@ def main(stdscr):
 	width = 40
 	captionWin = curses.newwin(height, width, beginY, beginX)
 	captionWin.border(0)
-	captionWin.addstr(1, 15, "---START SCREEN---", curses.color_pair(1))
+	captionWin.addstr(1, 8, "PROJECT POLKA", curses.color_pair(1))
 
 	beginX = curses.COLS / 2 - 26
 	beginY = 3
@@ -578,8 +578,9 @@ def main(stdscr):
 	width = 60
 	picWin = curses.newwin(height, width, beginY, beginX)
 	picWin.border(0)
-	picWin.addstr(5, 18, "ASCII pic here", curses.color_pair(2))
-
+	welcomeFile = cwd + "/roomPics/welcome.txt"
+	printFile(welcomeFile, picWin, 1, 1, 2, MAX_LINES)
+	
 	beginX = 0
 	beginY = 17
 	height = 20
