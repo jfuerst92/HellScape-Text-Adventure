@@ -72,7 +72,17 @@ testDoor = DoorFeature("oakdoor", "", 0, 2, False) #True for locked, false for u
 testDoor2 = DoorFeature("oakdoor", "", 2, 0, False)
 holeInWall = DoorFeature("hole", "", 0, 4, False)
 holeInWall2 = DoorFeature("hole", "", 4, 0, False)
-
+#doors from center to 'special' rooms
+pinkdoor1 = DoorFeature('pinkdoor', '', 9, 10, False)
+pinkdoor2 = DoorFeature('pinkdoor', '', 10, 9, False)
+greendoor1 = DoorFeature('greendoor', '', 9, 11, False)
+greendoor2 = DoorFeature('greendoor', '', 11, 9, False)
+golddoor1 = DoorFeature('golddoor', '', 9, 12, False)
+golddoor2 = DoorFeature('golddoor', '', 12, 9, False)
+purpledoor1 = DoorFeature('purpledoor', '', 9, 13, False)
+purpledoor2 = DoorFeature('purpledoor', '', 13, 9, False)
+yellowdoor1 = DoorFeature('yellowdoor', '', 9, 14, False)
+yellowdoor2 = DoorFeature('yellowdoor', '', 14, 9, False)
 
 #PLACEHOLDER DOORS TO FACILITATE MOVEMENT AROUND THE MAP#
 phDoor = DoorFeature("door1", "", 2, 3, False)
@@ -104,6 +114,16 @@ features.append(testDoor)
 features.append(testDoor2)
 features.append(holeInWall)
 features.append(holeInWall2)
+features.append(pinkdoor1)
+features.append(pinkdoor2)
+features.append(greendoor1)
+features.append(greendoor2)
+features.append(purpledoor1)
+features.append(purpledoor2)
+features.append(golddoor1)
+features.append(golddoor2)
+features.append(yellowdoor1)
+features.append(yellowdoor2)
 
 features.append(phDoor)
 features.append(phDoor2)
@@ -621,6 +641,21 @@ def main(stdscr):
 			+"Suddenly, a voice whispers in your ear : \"Welcome to hell, " + player.name + ". I am coming.\"\n"
 			+"You can feel pure terror surrounding you. You must get out.\n"
 			+"Type \"help\" to get a list of commands.")
+	f.close()
+	
+	#personalize center room.
+	f = open(os.getcwd() + "/roomDescriptions/center.txt", 'w')
+	f.write("You enter a cavernous room and see the devil, the Lord of Lies himself, in all his infernal glory.\n"
+			+'"Welcome to your own personal hell, ' + player.name + '. Before you lie five doors, each leading to\n'
+			+'a special hell. Go, explore the hells, and return to me when you have decided the hell you wish to\n'
+			+'suffer until the end of time."\n\n'
+			+'You see the following doors standing in front of you, seemingly attached to nothing:\n'
+			+'pinkdoor: A multihued door decorated with skulls and crosses\n'
+			+'greendoor: What looks like an ordinary, lime-colored, apartment door\n'
+			+'yellowdoor: A door made out of what appears to be sandstone\n'
+			+'golddoor: A large wooden door decorated with gems and inlaid with gold designs\n'
+			+'purpledoor: Another seemingly ordinary door. This one is a light shade of purple, and has no adornments other than a handle\n')
+			
 	f.close()
 	
 	

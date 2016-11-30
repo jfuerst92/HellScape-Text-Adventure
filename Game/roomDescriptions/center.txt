@@ -1,1 +1,11 @@
-Center text here.
+You enter a cavernous room and see the devil, the Lord of Lies himself, in all his infernal glory.
+"Welcome to your own personal hell, Yeltzin. Before you lie five doors, each leading to
+a special hell. Go, explore the hells, and return to me when you have decided the hell you wish to
+suffer until the end of time."
+
+You see the following doors standing in front of you, seemingly attached to nothing:
+pinkdoor: A multihued door decorated with skulls and crosses
+greendoor: What looks like an ordinary, lime-colored, apartment door
+yellowdoor: A door made out of what appears to be sandstone
+golddoor: A large wooden door decorated with gems and inlaid with gold designs
+purpledoor: Another seemingly ordinary door. This one is a light shade of purple, and has no adornments other than a handle
