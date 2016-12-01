@@ -35,6 +35,7 @@ rooms.append(Room("Good Ending", "", "", 0, 0, "goodending"))
 player = Player()
 
 
+
 #items = Item.getItemList()
 #Item(type, name, description, room)
 doru = Item("weapon", "doru", "A sharp tipped spear sits firmly planted in the sternum of some demonic skeleton. If this spear killed such a monster, I may benefit by holding on to this.", 0)
@@ -369,6 +370,16 @@ def help():
 	
 	return "message", helpString
  
+#-------------------------------------------------------------------------------------------------------------------------------------------------------
+# Function: checkPlayerHealth
+# This function prints a list of the items in user inventory to screen.
+# User input: None
+#------------------------------------------------------------------------------------------------------------------------------------------------------ 
+def checkPlayerHealth():
+	if (player.health > 0):
+		return True
+	else:
+		return False
  
  
 #-------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -827,6 +838,7 @@ def main(stdscr):
 	
 	value = "start"
 	type = "room"
+	dead = False
 	while value != "exit":
 	
 		if type == "error":
@@ -871,15 +883,24 @@ def main(stdscr):
 		inputWin.addstr(1, 1, ">", curses.color_pair(3))
 		inputWin.refresh()
 		curses.echo()
+		
+		
+			
 		if ((player.inFight == True) and player.pTurn == False):
 			userInput = "rTurn"
+		elif (dead == True):
+			userInput = "exit"
 		else:
 			userInput = inputWin.getstr()
 		if userInput == "exit":
 			break
 		command = []
 		command = userInput.split()
-		type, value = interpret(command, verbDic)
+		if (not checkPlayerHealth()):
+			dead = True;
+			type, value = "message", "You have died. For real this time. The reaper strips the soul from your corpse and you feel not but pain and suffering"
+		else:
+			type, value = interpret(command, verbDic)
 		curses.noecho()
 
 		#clear error screen message if any
@@ -892,7 +913,7 @@ def main(stdscr):
 		captionWin.refresh()
 		textWin.refresh()
 		inputWin.refresh()
-
+		
 	stdscr.getch()	
 
 wrapper(main)
