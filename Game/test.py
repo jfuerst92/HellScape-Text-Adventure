@@ -64,16 +64,20 @@ items.append(relic)
 items.append(key)
 items.append(torch)
 items.append(hotSauce)
-items.append(brains)
+#items.append(brains)
 items.append(gem1)
 items.append(gem2)
 items.append(gem3)
 
 #add features
 stall = Feature("stall", "", 10)
+stall.type = "other"
 grave = Feature("grave", "", 10)
-zdoor = Feature("zdoor", "", 11)
-zmirror = Feature("zmirror", "", 11)
+grave.type = "other"
+zdoor = Feature("bedroomdoor", "", 11)
+zdoor.type = "other"
+zmirror = Feature("mirror", "", 11)
+zmirror.type = "other"
 testDoor = DoorFeature("oakdoor", "", 0, 2, False) #True for locked, false for unlocked. The key item will be used on the door to unlock it
 testDoor2 = DoorFeature("oakdoor", "", 2, 0, False)
 holeInWall = DoorFeature("hole", "", 0, 4, False)
@@ -324,7 +328,10 @@ def look(command, words):
 	#if player is trying to look at feature
     for feature in features:
         if (lookAt == feature.name):
-             if feature.room == player.curRoom:
+            if feature.room == player.curRoom:
+				#conditional cases
+				if (lookAt == 'bedroomdoor'):
+					items.append(brains)
 				return "feature", lookAt
     
 
@@ -486,7 +493,9 @@ def use(command, words):
                     else:
                         player.changeRooms(feat.conn)
                         return "message", "With the three gems inserted into the slots, the ground begins to shake and the statue moves, revealing a hidden passage underneath, which you enter.\n"
-                        
+                
+                else:
+					return "message", "you can't use that feature"
     #if player is trying to use an item
     
     for item in items:
