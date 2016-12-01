@@ -56,6 +56,8 @@ workingbrain = Item("junk", "workingbrain", "a pulsing human brain", 12)
 rooms[12].items.append(workingbrain)
 knife = Item("junk", "knife", "a large steak knife", 13)
 rooms[13].items.append(knife)
+heirloom = Item("junk", "heirloom", "a family heirloom", 12)
+rooms[12].items.append(heirloom)
 
 gem1 = Item("gem", "ruby", "A large gem sits on the floor, covered in dust. Yet it still shines vibrantly, malevolently.", 5)
 rooms[5].items.append(gem1)
@@ -96,6 +98,10 @@ man2 = Feature("man2", "", 13)
 man2.type = "other"
 woman = Feature("woman", "", 13)
 woman.type = "other"
+odin = Feature("oneeye", "", 12)
+odin.type = "other"
+table = Feature("table", "", 12)
+table.type = "other"
 
 testDoor = DoorFeature("oakdoor", "", 0, 2, False) #True for locked, false for unlocked. The key item will be used on the door to unlock it
 testDoor2 = DoorFeature("oakdoor", "", 2, 0, False)
@@ -159,6 +165,8 @@ features.append(jar2)
 features.append(man1)
 features.append(man2)
 features.append(woman)
+features.append(odin)
+features.append(table)
 
 features.append(phDoor)
 features.append(phDoor2)
@@ -461,8 +469,16 @@ def drop(command, words): #the player object should be passed into the construct
                    player.dropItem(item2) #This function should drop the item from the players inventory
                    item2.curRoom = player.curRoom
                    rooms[player.curRoom].addItem(item2)
+				   
+                   ####conditional action######
+                   if (command[1] == 'knife' and player.curRoom == 12):    #if current room is valhala
+                       items.append(heirloom)
+                       return "message", "you drop the " + command[1] + " on the table and an old watch appears on your plate"
+                   ############################
+				   
                    return "message", "You drop the " + item2.name + " on the floor"
                    #player.curRoom.dropEvent(item) #If dropping the item has some effect on the room, then this function would make that happen.
+
                   
     return "error", "You you do not have such an item do drop."
     
