@@ -11,6 +11,7 @@ from feature import Feature
 from feature import DoorFeature
 from feature import PuzzFeature
 from feature import HandFeature
+from feature import LookFeature
 #from feature import getItemList
 from room import Room
 from room import readFile
@@ -108,7 +109,7 @@ odin = Feature("oneeye", "", 12)
 odin.type = "other"
 table = Feature("table", "", 12)
 table.type = "other"
-testDoor = DoorFeature("oakdoor", "", 0, 2, False) #True for locked, false for unlocked. The key item will be used on the door to unlock it
+testDoor = DoorFeature("oakdoor", "", 0, 2, True) #True for locked, false for unlocked. The key item will be used on the door to unlock it
 testDoor2 = DoorFeature("oakdoor", "", 2, 0, False)
 holeInWall = DoorFeature("jetty", "", 0, 4, False)
 holeInWall2 = DoorFeature("jetty", "", 4, 0, False)

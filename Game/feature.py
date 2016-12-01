@@ -56,3 +56,10 @@ class HandFeature(Feature):
 		rooms[self.room].items.append(self.item)
 		
 		
+class LookFeature(Feature):
+	def __init__(self, name, desc, room):
+		self.type = "look"
+		self.name = name
+		self.desc = desc
+		self.room = room
+		
