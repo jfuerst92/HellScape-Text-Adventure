@@ -1,0 +1,14 @@
+CC
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Committer: Joseph Fuerst <fuerstj@flip1.engr.oregonstate.edu>
+#
+# On branch cursesAdded
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	new file:   Game/featureDescriptions/gargoyle.txt
+#	new file:   Game/featureNames/gargoyle.txt
+#	new file:   Game/featurePics/gargoyle.txt
+#

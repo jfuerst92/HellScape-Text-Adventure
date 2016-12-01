@@ -11,6 +11,7 @@ from feature import Feature
 from feature import DoorFeature
 from feature import PuzzFeature
 from feature import HandFeature
+from feature import LookFeature
 #from feature import getItemList
 from room import Room
 from room import readFile
@@ -32,6 +33,7 @@ rooms.append(Room("Egypt Ending", "", "", 0, 0, "yellowending"))
 rooms.append(Room("Good Ending", "", "", 0, 0, "goodending"))
 
 player = Player()
+
 
 
 #items = Item.getItemList()
@@ -110,7 +112,7 @@ odin = Feature("oneeye", "", 12)
 odin.type = "other"
 table = Feature("table", "", 12)
 table.type = "other"
-testDoor = DoorFeature("oakdoor", "", 0, 2, False) #True for locked, false for unlocked. The key item will be used on the door to unlock it
+testDoor = DoorFeature("oakdoor", "", 0, 2, True) #True for locked, false for unlocked. The key item will be used on the door to unlock it
 testDoor2 = DoorFeature("oakdoor", "", 2, 0, False)
 holeInWall = DoorFeature("jetty", "", 0, 4, False)
 holeInWall2 = DoorFeature("jetty", "", 4, 0, False)
@@ -373,6 +375,16 @@ def help():
 	
 	return "message", helpString
  
+#-------------------------------------------------------------------------------------------------------------------------------------------------------
+# Function: checkPlayerHealth
+# This function prints a list of the items in user inventory to screen.
+# User input: None
+#------------------------------------------------------------------------------------------------------------------------------------------------------ 
+def checkPlayerHealth():
+	if (player.health > 0):
+		return True
+	else:
+		return False
  
  
 #-------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -671,6 +683,10 @@ def useItem(item, feature):
 	if (feature == None):
 		if (item.type == "weapon"):
 			if (reaper.curRoom == player.curRoom): #attack the reaper with your weapon if it is present
+				item.decUses()
+				if (item.broken()):
+					player.dropItem(item)
+					return "message", "as you go to attack, the weapon brakes! It is no longer useable!"
 				return "message", reaper.getAttacked()
 			else:
 				return "error", "There is nothing to attack"
@@ -874,6 +890,7 @@ def main(stdscr):
 	
 	value = "start"
 	type = "room"
+	dead = False
 	while value != "exit":
 	
 		if type == "error":
@@ -918,15 +935,24 @@ def main(stdscr):
 		inputWin.addstr(1, 1, ">", curses.color_pair(3))
 		inputWin.refresh()
 		curses.echo()
+		
+		
+			
 		if ((player.inFight == True) and player.pTurn == False):
 			userInput = "rTurn"
+		elif (dead == True):
+			userInput = "exit"
 		else:
 			userInput = inputWin.getstr()
 		if userInput == "exit":
 			break
 		command = []
 		command = userInput.split()
-		type, value = interpret(command, verbDic)
+		if (not checkPlayerHealth()):
+			dead = True;
+			type, value = "message", "You have died. For real this time. The reaper strips the soul from your corpse and you feel not but pain and suffering"
+		else:
+			type, value = interpret(command, verbDic)
 		curses.noecho()
 
 		#clear error screen message if any
@@ -939,7 +965,7 @@ def main(stdscr):
 		captionWin.refresh()
 		textWin.refresh()
 		inputWin.refresh()
-
+		
 	stdscr.getch()	
 
 wrapper(main)
