@@ -588,6 +588,8 @@ def go(command, words): #the player object should be passed into the constructor
 # User input: use <feature>, use <item>, use <item> on <feature>, use <item> on <item>
 #------------------------------------------------------------------------------------------------------------------------------------------------------
 def use(command, words): 
+	if (words == 1):
+		return "error", "You must indicate something to use\n"
 	#if player is trying to use a feature
 	tFeat = ""
 	for feat in features:
