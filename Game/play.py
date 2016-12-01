@@ -569,7 +569,7 @@ def go(command, words): #the player object should be passed into the constructor
 					if (goTo == 'woman'):
 						items.append(knife)
 					##########################
-				return "feature", goTo
+					return "feature", goTo
 				
 	return "error", "That is not a place you can go"
    
