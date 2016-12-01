@@ -23,6 +23,12 @@ rooms.append(Room("Quiet Apartment","","",0,0, "z"))
 rooms.append(Room("Loud Banquet Hall","","",0,0, "valhala"))
 rooms.append(Room("Room with Other People", "", "", 0, 0, "noexit"))
 rooms.append(Room("Dark and Dusty Tomb", "", "", 0, 0, "egypt"))
+rooms.append(Room("Muertos Ending", "", "", 0, 0, "pinkending"))
+rooms.append(Room("Z Ending", "", "", 0, 0, "greenending"))
+rooms.append(Room("Valhala Ending", "", "", 0, 0, "goldending"))
+rooms.append(Room("No Exit Ending", "", "", 0, 0, "purpleending"))
+rooms.append(Room("Egypt Ending", "", "", 0, 0, "yellowending"))
+rooms.append(Room("Good Ending", "", "", 0, 0, "goodending"))
 
 player = Player()
 #items = Item.getItemList()
@@ -72,6 +78,7 @@ testDoor = DoorFeature("oakdoor", "", 0, 2, False) #True for locked, false for u
 testDoor2 = DoorFeature("oakdoor", "", 2, 0, False)
 holeInWall = DoorFeature("hole", "", 0, 4, False)
 holeInWall2 = DoorFeature("hole", "", 4, 0, False)
+
 #doors from center to 'special' rooms
 pinkdoor1 = DoorFeature('pinkdoor', '', 9, 10, False)
 pinkdoor2 = DoorFeature('pinkdoor', '', 10, 9, False)
