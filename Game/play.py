@@ -56,11 +56,13 @@ rooms[14].items.append(goldcoin)
 heart = Item("junk", "heart", "a beating human heart", 14)
 rooms[14].items.append(heart)
 workingbrain = Item("junk", "workingbrain", "a pulsing human brain", 12)
-rooms[12].items.append(workingbrain)
+#rooms[12].items.append(workingbrain)
 knife = Item("junk", "knife", "a large steak knife", 13)
 rooms[13].items.append(knife)
 heirloom = Item("junk", "heirloom", "a family heirloom", 12)
 rooms[12].items.append(heirloom)
+spirit = Item("junk", "spirit", "a ghostly apparition resembling yourself", 10)
+rooms[10].items.append(spirit)
 
 gem1 = Item("gem", "ruby", "A large gem sits on the floor, covered in dust. Yet it still shines vibrantly, malevolently.", 5)
 rooms[5].items.append(gem1)
@@ -78,7 +80,7 @@ items.append(scroll)
 items.append(relic)
 items.append(key)
 items.append(torch)
-items.append(hotSauce)
+#items.append(hotSauce)
 #items.append(brains)
 items.append(gem1)
 items.append(gem2)
@@ -357,13 +359,16 @@ def fightInterpret(command, verbDic):
 #------------------------------------------------------------------------------------------------------------------------------------------------------ 
 def help():
 	helpString = ("Available commands by verb:\n"
-			+"look\n"
-			+ "look at <item>"
-			+"pick up <item> / pickup <item>\n"
-			+"drop <item>\n"
-			+"go <room> (currently unfinished)\n"
-			  	+ "Use <feature> (unfinished. You can type use oakdoor in the first room and it should take you to a connecting room)"
-			+"inventory\n")
+			+"   look\n"
+			+"   look at <item>\n"
+			+"   look <feature>\n"
+			+"   look inventory\n"
+			+"   pick up <item> / pickup <item>\n"
+			+"   drop <item>\n"
+			+"   go <room> (currently unfinished)\n"
+			+"   use <feature> (unfinished. You can type use oakdoor in the first room and it should take you to a connecting room)"
+			+"   use  <item> on <feature>\n"
+			+"   inventory\n")
 	
 	
 	return "message", helpString
@@ -491,6 +496,12 @@ def pickup(command, words): #the player object should be passed into the constru
 			if checkItemInRoom(item) == True:
 				player.addItem(item) #This function adds the item to the players inventory
 				rooms[player.curRoom].removeItem(item)
+				
+				###check for good ending####
+				if tItem == "heart" or tItem == "workingbrain" or tItem == "spirit":
+					if (heart in player.getInventory()) and (spirit in player.getInventory()) and (workingbrain in player.getInventory()):
+						return "room", "goodending"
+						
 				return "message",  "You pick up the " + item.name + " and put it away in your bag."
 	return "error", "You look but you do not see this item anywhere in the room."
 	
@@ -629,12 +640,26 @@ def use(command, words):
 				if (tItem == item2.name):
 					#return "message", "You use the " + item2.name + " in your inventory\n"
 					if (len(command) > 2):
-						if (command[2] == "on"): #player is using an item on something else
+						if (command[2] == "on" and len(command) > 3): #player is using an item on something else
 							for feat in features:
-								if (command[3] ==feat.name):
+								if (command[3] == feat.name):
 									if (feat.room == player.curRoom):
 										tFeat = command[3]
 										return useItem(item2, feat)
+										
+							for secItem in items:
+								if (command[3] == secItem.name):
+									if secItem in player.getInventory():
+										if (item2.name == "hotSauce" and secItem.name == "brains") or (item2.name == "brains" and secItem == "hotSauce"):
+											player.dropItem(hotSauce)
+											player.dropItem(brains)
+											rooms[player.curRoom].items.append(workingbrain)
+											player.addItem(workingbrain)
+											##check for good ending condition##
+											if (spirit in player.getInventory()) and (heart in player.getInventory()):
+												return "room", "goodending";
+											else:
+												return "message", "Your brain starts to steam and then begins to pulse"
 					else:
 						return useItem(item2, None)
 			 return "error", "You do not have such an item.\n"
@@ -672,6 +697,29 @@ def useItem(item, feature):
 		rooms[6].items.append(armor)
 		armor.curRoom = 6
 		return "message", "You press the scroll against the palm of the gargoyles hand. The statue briefly comes to life, before shattering, revealing a shining set of armor on the ground.\n"
+	
+	###############handle conditional cases###############
+	if item.name == "goldcoin" and feature.name == "stall":
+		player.dropItem(item)
+		items.append(hotSauce)
+		player.addItem(hotSauce)
+		return "message", "You have bought the hot sauce"
+	
+	if item.name == "knife" and feature.name == "table":
+		player.dropItem(item)
+		items.append(heirloom)
+		return "message", "An old pocketwatch appears on your plate"
+		
+	if item.name == "heirloom" and feature.name == "grave":
+		player.dropItem(item)
+		items.append(spirit)
+		player.addItem(spirit)
+		if (heart in player.getInventory()) and (workingbrain in player.getInventory()):
+			return "room", "goodending"
+		else:
+			return "message", "A ghost rises from the grave and begins to follow you"
+	########################################################
+	
 	return "error", "invalid action (or not yet  implemented)"
  
 def initiateFight():

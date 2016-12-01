@@ -410,11 +410,11 @@ def search():
     message = "you notice something..\n"
     for item in items:
         if (item.curRoom ==player.curRoom):
-            message = message + "You see a " + item.name + " in this room.\n"
+            message = message + "     You see a " + item.name + " in this room.\n"
             
     for feat in features:
         if (feat.room ==player.curRoom):
-            message = message + "You see a " + feat.name + " in this room.\n"       
+            message = message + "     You see a " + feat.name + " in this room.\n"       
     return "message", message
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------
