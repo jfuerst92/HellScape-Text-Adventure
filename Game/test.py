@@ -48,6 +48,14 @@ hotSauce = Item("weapon", "hotSauce", "bottle o' hot sauce", 10)
 rooms[10].items.append(hotSauce)
 brains = Item("junk", "brains","brains", 11)
 rooms[11].items.append(brains)
+goldcoin = Item("junk", "goldcoin", "a gold coin", 14)
+rooms[14].items.append(goldcoin)
+heart = Item("junk", "heart", "a beating human heart", 14)
+rooms[14].items.append(heart)
+workingbrain = Item("junk", "workingbrain", "a pulsing human brain", 12)
+rooms[12].items.append(workingbrain)
+knife = Item("junk", "knife", "a large steak knife", 13)
+rooms[13].items.append(knife)
 
 gem1 = Item("gem", "ruby", "A large gem sits on the floor, covered in dust. Yet it still shines vibrantly, malevolently.", 5)
 rooms[5].items.append(gem1)
@@ -78,6 +86,17 @@ zdoor = Feature("bedroomdoor", "", 11)
 zdoor.type = "other"
 zmirror = Feature("mirror", "", 11)
 zmirror.type = "other"
+jar1 = Feature("jar1", "", 14)
+jar1.type = "other"
+jar2 = Feature("jar2", "", 14)
+jar2.type = "other"
+man1 = Feature("man1", "", 13)
+man1.type = "other"
+man2 = Feature("man2", "", 13)
+man2.type = "other"
+woman = Feature("woman", "", 13)
+woman.type = "other"
+
 testDoor = DoorFeature("oakdoor", "", 0, 2, False) #True for locked, false for unlocked. The key item will be used on the door to unlock it
 testDoor2 = DoorFeature("oakdoor", "", 2, 0, False)
 holeInWall = DoorFeature("hole", "", 0, 4, False)
@@ -135,6 +154,11 @@ features.append(golddoor1)
 features.append(golddoor2)
 features.append(yellowdoor1)
 features.append(yellowdoor2)
+features.append(jar1)
+features.append(jar2)
+features.append(man1)
+features.append(man2)
+features.append(woman)
 
 features.append(phDoor)
 features.append(phDoor2)
@@ -148,6 +172,15 @@ features.append(phDoor9)
 features.append(phDoor10)
 features.append(statue)
 features.append(ladder)
+
+#########################BOOLEANS FOR STATE CHECKS#################
+
+brainsInBowl = False
+hotSauceInBowl = False
+
+
+###################################################################
+
 
 reaper = Reaper(9)
 #The current game dictionary. It recognizes these words. 
@@ -329,9 +362,17 @@ def look(command, words):
     for feature in features:
         if (lookAt == feature.name):
             if feature.room == player.curRoom:
-				#conditional cases
+				#conditional cases#####
 				if (lookAt == 'bedroomdoor'):
 					items.append(brains)
+				if (lookAt == 'jar1'):
+					items.append(heart)
+				if (lookAt == 'jar2'):
+					items.append(goldcoin)
+				if (lookAt == 'woman'):
+					items.append(knife)
+				#######################
+				
 				return "feature", lookAt
     
 
@@ -450,6 +491,17 @@ def go(command, words): #the player object should be passed into the constructor
 	for feature in features:
 		if (goTo == feature.name):
 			if feature.room == player.curRoom:
+				#conditional actions#######
+				if (goTo == 'bedroomdoor'):
+					items.append(brains)
+				if (goTo == 'jar1'):
+					items.append(heart)
+				if (goTo == 'jar2'):
+					items.append(goldcoin)
+				if (goTo == 'woman'):
+					items.append(knife)
+				##########################
+				
 				return "feature", goTo
 				
 	return "error", "That is not a place you can go"
