@@ -658,6 +658,10 @@ def useItem(item, feature):
 	if (feature == None):
 		if (item.type == "weapon"):
 			if (reaper.curRoom == player.curRoom): #attack the reaper with your weapon if it is present
+				item.decUses()
+				if (item.broken()):
+					player.dropItem(item)
+					return "message", "as you go to attack, the weapon brakes! It is no longer useable!"
 				return "message", reaper.getAttacked()
 			else:
 				return "error", "There is nothing to attack"
