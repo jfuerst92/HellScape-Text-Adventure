@@ -519,8 +519,8 @@ def look(command, words):
 					items.append(goldcoin)
 				if (lookAt == 'woman'):
 					items.append(knife)
-				if (lookAt == 'pinkdoor' or lookAt == 'greendoor' or lookAt == 'golddoor' or lookAt == 'purpledoor' or lookAt == 'yellowdoor'):
-					return "message", "Type use to use these doors"
+				#if (lookAt == 'pinkdoor' or lookAt == 'greendoor' or lookAt == 'golddoor' or lookAt == 'purpledoor' or lookAt == 'yellowdoor'):
+				#	return "message", "Type use to use these doors"
 				#######################
 				
 				return "feature", lookAt
