@@ -134,6 +134,7 @@ purpledoor1 = DoorFeature('purpledoor', '', 9, 13, False)
 purpledoor2 = DoorFeature('purpledoor', '', 13, 9, False)
 yellowdoor1 = DoorFeature('yellowdoor', '', 9, 14, False)
 yellowdoor2 = DoorFeature('yellowdoor', '', 14, 9, False)
+satanicdoor = DoorFeature('evildoor', '', 8, 9, False)
 
 #PLACEHOLDER DOORS TO FACILITATE MOVEMENT AROUND THE MAP#
 phDoor = DoorFeature("door1", "", 2, 3, False)
@@ -191,6 +192,7 @@ features.append(man2)
 features.append(woman)
 features.append(odin)
 features.append(table)
+features.append(satanicdoor)
 
 features.append(phDoor)
 features.append(phDoor2)
