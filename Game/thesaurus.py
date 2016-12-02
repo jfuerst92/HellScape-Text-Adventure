@@ -20,8 +20,11 @@ def getSynonymsByType(response, wordType):
 	if response == None:
 		return None
 	else:
-		return response[wordType]["syn"]
-	
+		if wordType in response:
+			return response[wordType]["syn"]
+		else:
+			return None
+			
 def validateWord(wordArrayOfArrays, word, wordType):
 	#first check if word is already in wordArray
 	for arrayNum in range(len(wordArrayOfArrays)):
