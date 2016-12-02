@@ -211,13 +211,15 @@ features.append(chest)
 features.append(message)
 
 ###################STATIC VARIABLES FOR ANIMATIONS################
+#PIC_FILES and COLOR_ARRAY should be the same length
 WORKING_BRAIN_MESSAGE = "Your brain starts to steam and then begins to pulse"
+REAPER_MESSAGE = "You are startled by a sound behind you. A dark hooded skeletal figure materializes in the room. It is the Grim Reaper, come to finish what he has started. It approaches you, you must act quickly!"
 
 WORKING_BRAIN_PIC_FILES = ["itemPics/brains.txt", "itemPics/workingbrain.txt"]
+REAPER_PIC_FILES = ["itemPics/grimreaper1.txt", "itemPics/grimreaper2.txt", "itemPics/grimreaper3.txt"]
 
 WORKING_BRAIN_COLOR_ARRAY = [2, 3]
-
-
+REAPER_COLOR_ARRAY = [3, 4, 2]
 ##################################################################
 
 #################List to check rooms visited#######################
@@ -846,8 +848,8 @@ def useItem(item, feature):
  
 def initiateFight():
 	player.inFight = True
-	return "message", "You are startled by a sound behind you. A dark hooded skeletal figure materializes in the room. It is the Grim Reaper, come to finish what he has started. It approaches you, you must act quickly!"
-
+	return "specialmessage", "reaper"
+	
 def reaperBattle():
 	response = reaper.reaperAction(player)
 	return "error", response
@@ -1030,6 +1032,9 @@ def main(stdscr):
 		elif type == "specialmessage":
 			if value == "workingbrain":
 				specialMessage(textWin, picWin, WORKING_BRAIN_MESSAGE, WORKING_BRAIN_PIC_FILES, WORKING_BRAIN_COLOR_ARRAY, MAX_LINES)
+			elif value == "reaper":
+				specialMessage(textWin, picWin, REAPER_MESSAGE, REAPER_PIC_FILES, REAPER_COLOR_ARRAY, MAX_LINES)
+				
 		else:
 			name = str(cwd) + "/" + type + "Names/" + value + ".txt"
 			pic = str(cwd) + "/" + type + "Pics/" + value + ".txt"
