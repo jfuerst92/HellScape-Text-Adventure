@@ -20,7 +20,6 @@ from room import readFile
 from thesaurus import validateWord
 import time
 import sys
-import random
 
 ########################################CODE FROM PLAY.PY#####################################
 
@@ -152,9 +151,6 @@ phDoor8 = DoorFeature("diamonddoor", "", 6, 1, False)
 phDoor9 = DoorFeature("xdoor", "", 1, 7, False)
 phDoor10 = DoorFeature("xdoor", "", 7, 1, False)
 
-phDoor11 = DoorFeature("pentagramdoor", "", 8, 9, False)
-phDoor12 = DoorFeature("pentagramdoor", "", 9, 8, False)
-
 statue = PuzzFeature("statue", "", 3, 8)
 ladder = DoorFeature("ladder", "", 8, 3, False)
 
@@ -206,8 +202,6 @@ features.append(phDoor7)
 features.append(phDoor8)
 features.append(phDoor9)
 features.append(phDoor10)
-features.append(phDoor11)
-features.append(phDoor12)
 features.append(statue)
 features.append(ladder)
 features.append(gargoyle)
@@ -710,7 +704,20 @@ def go(command, words): #the player object should be passed into the constructor
 						items.append(knife)
 					##########################
 					return "feature", goTo
-				
+	
+	#if players are in center they can go to an ending
+	if player.curRoom == 9:			#if player is in center
+		if goTo == "pink":
+			return "room", "pinkending"
+		elif goTo == "green":
+			return "room", "greenending"
+		elif goTo == "gold":
+			return "room", "goldending"
+		elif goTo == "purple":
+			return "room", "purpleending"
+		elif goTo == "yellow":
+			return "room", "yellowending"
+			
 	return "error", "That is not a place you can go"
    
    
@@ -746,9 +753,6 @@ def use(command, words):
 								#return "room", rooms[player.curRoom].fname
 						return "message",  "It's locked.. However you do notice a small keyhole. Surely there must be a key somewhere?"
 					else: #player uses the door. they go to the new room
-						if (player.inFight == True):
-							if(random.randint(0, 4) < 3):
-								return "message", "before you can escape, the reaper teleports in front of you. You fail to escape the room!"
 						player.changeRooms(feat.conn) 
 						player.pTurn = True
 						player.inFight = False
