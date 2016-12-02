@@ -883,11 +883,11 @@ def errorMessage(printScreen, message):
 	
 def message(textScreen, picScreen, message):
 	textScreen.clear()
-	textScreen.border(0)
+	#textScreen.border(0)
 	textScreen.addstr(3, 1, message, curses.color_pair(4))
 	
 	picScreen.clear()
-	picScreen.border(0)
+	#picScreen.border(0)
 	
 	textScreen.refresh()
 	picScreen.refresh()
@@ -913,15 +913,15 @@ def specialMessage(textScreen, picScreen, message, picFiles, colorArray, MAX_LIN
 	
 def printInventory(nameScreen, picScreen, textScreen, invString):
 		nameScreen.clear()
-		nameScreen.border(0)
+		#nameScreen.border(0)
 		nameScreen.addstr(1,1, "PLAYER INVENTORY", curses.color_pair(1))
 		
 		picScreen.clear()
-		picScreen.border(0)
+		#picScreen.border(0)
 		
 		textScreen.clear()
-		textScreen.border(0)
 		textScreen.addstr(3,1, invString, curses.color_pair(4))
+		#textScreen.border(0)
 		
 		nameScreen.refresh()
 		picScreen.refresh()
@@ -955,7 +955,7 @@ def main(stdscr):
 	height = 3
 	width = 40
 	captionWin = curses.newwin(height, width, beginY, beginX)
-	captionWin.border(0)
+	#captionWin.border(0)
 	captionWin.addstr(1, 8, "PROJECT POLKA", curses.color_pair(1))
 
 	beginX = curses.COLS / 2 - 26
@@ -963,7 +963,7 @@ def main(stdscr):
 	height = 15
 	width = 60
 	picWin = curses.newwin(height, width, beginY, beginX)
-	picWin.border(0)
+	#picWin.border(0)
 	welcomeFile = cwd + "/roomPics/welcome.txt"
 	printFile(welcomeFile, picWin, 1, 1, 2, MAX_LINES)
 	
@@ -972,7 +972,7 @@ def main(stdscr):
 	height = 20
 	width = curses.COLS - 1
 	textWin = curses.newwin(height, width, beginY, beginX)
-	textWin.border(0)
+	#textWin.border(0)
 	textWin.addstr(10, curses.COLS / 2 - 5, "Enter your name", curses.color_pair(4))
 
 	beginX = 0
@@ -986,7 +986,7 @@ def main(stdscr):
 	height = 3
 	width = curses.COLS - 3
 	inputWin = curses.newwin(height, width, beginY, beginX)
-	inputWin.border(0)
+	#inputWin.border(0)
 	inputWin.addstr(1, 1, ">", curses.color_pair(3))
 
 	stdscr.refresh()
@@ -1060,10 +1060,10 @@ def main(stdscr):
 			picWin.clear()
 			textWin.clear()
 			inputWin.clear()
-			captionWin.border(0)
-			picWin.border(0)
-			textWin.border(0)
-			inputWin.border(0)
+			#captionWin.border(0)
+			#picWin.border(0)
+			#textWin.border(0)
+			#inputWin.border(0)
 		
 			#load entity from file
 			printFile(name, captionWin, 1, 1, 1, 10)
@@ -1079,7 +1079,7 @@ def main(stdscr):
 		#get input from user
 		
 		inputWin.clear()
-		inputWin.border(0)
+		#inputWin.border(0)
 		inputWin.addstr(1, 1, ">", curses.color_pair(3))
 		inputWin.refresh()
 		curses.echo()
