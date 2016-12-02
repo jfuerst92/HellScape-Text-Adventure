@@ -150,6 +150,9 @@ phDoor8 = DoorFeature("diamonddoor", "", 6, 1, False)
 phDoor9 = DoorFeature("xdoor", "", 1, 7, False)
 phDoor10 = DoorFeature("xdoor", "", 7, 1, False)
 
+phDoor11 = DoorFeature("pentagramdoor", "", 8, 9, False)
+phDoor12 = DoorFeature("pentagramdoor", "", 9, 8, False)
+
 statue = PuzzFeature("statue", "", 3, 8)
 ladder = DoorFeature("ladder", "", 8, 3, False)
 
@@ -201,6 +204,8 @@ features.append(phDoor7)
 features.append(phDoor8)
 features.append(phDoor9)
 features.append(phDoor10)
+features.append(phDoor11)
+features.append(phDoor12)
 features.append(statue)
 features.append(ladder)
 features.append(gargoyle)
