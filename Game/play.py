@@ -399,7 +399,7 @@ def fightInterpret(command, verbDic):
 			return openChest(command, words)
 		elif (command[0] == "search"):
 			return search()
-		elif (comand[0] == "history"):
+		elif (command[0] == "history"):
 			return history()
 		
 		else:
@@ -702,12 +702,12 @@ def go(command, words): #the player object should be passed into the constructor
 	
 	goTo = command[1].lower()
 	
+	#if at ending, you can't leave the room
+	if (player.curRoom >= 15):
+		return "error", "The game is over.  Type exit to exit game"
+		
 	i = 0
 	for i in range(len(rooms)):
-		#if at ending, you can't leave the room
-		if (player.curRoom >= 15):
-			return "error", "The game is over.  Type exit to exit game"
-			
 		if (goTo == rooms[i].fname and roomsVisited[goTo]):
 			player.changeRooms(i) 
 			player.inFight = False
@@ -733,14 +733,19 @@ def go(command, words): #the player object should be passed into the constructor
 	#if players are in center they can go to an ending
 	if player.curRoom == 9:			#if player is in center
 		if goTo == "pink":
+			player.changeRooms(15)
 			return "room", "pinkending"
 		elif goTo == "green":
+			player.changeRooms(16)
 			return "room", "greenending"
 		elif goTo == "gold":
+			player.changeRooms(17)
 			return "room", "goldending"
 		elif goTo == "purple":
+			player.changeRooms(18)
 			return "room", "purpleending"
 		elif goTo == "yellow":
+			player.changeRooms(19)
 			return "room", "yellowending"
 			
 	return "error", "That is not a place you can go"
@@ -818,6 +823,7 @@ def use(command, words):
 											player.addItem(workingbrain)
 											##check for good ending condition##
 											if (spirit in player.getInventory()) and (heart in player.getInventory()):
+												player.changeRooms(20)
 												return "room", "goodending";
 											else:
 												return "specialmessage", "workingbrain"
@@ -880,6 +886,7 @@ def useItem(item, feature):
 		items.append(spirit)
 		player.addItem(spirit)
 		if (heart in player.getInventory()) and (workingbrain in player.getInventory()):
+			player.changeRooms(20)
 			return "room", "goodending"
 		else:
 			return "message", "A ghost rises from the grave and begins to follow you"
