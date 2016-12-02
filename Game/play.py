@@ -413,9 +413,11 @@ def help():
 			+"   pick up <item> / pickup <item>\n"
 			+"   drop <item>\n"
 			+"   go <room> (currently unfinished)\n"
-			+"   use <feature> (unfinished. You can type use oakdoor in the first room and it should take you to a connecting room)\n"
+			+"   go <feature>\n"
+			+"   use <feature>\n"
 			+"   use  <item> on <feature>\n"
-			+"   inventory\n")
+			+"   inventory\n"
+			+"   search")
 	
 	
 	return "message", helpString
