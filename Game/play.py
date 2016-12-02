@@ -208,11 +208,15 @@ features.append(lever2)
 features.append(lever3)
 features.append(chest)
 features.append(message)
-#########################BOOLEANS FOR STATE CHECKS#################
-			
-brainsInBowl = False
-hotSauceInBowl = False
-			
+
+#################List to check rooms visited#######################
+roomsVisited = {}
+for room in rooms:
+	i = room.fname.find('F')
+	if i < 0:
+		roomsVisited[room.fname] = False	#all rooms start as unvisited
+	else:
+		roomsVisited[room.fname[:i]] = False
 			
 ###################################################################
 
@@ -395,7 +399,7 @@ def help():
 			+"   pick up <item> / pickup <item>\n"
 			+"   drop <item>\n"
 			+"   go <room> (currently unfinished)\n"
-			+"   use <feature> (unfinished. You can type use oakdoor in the first room and it should take you to a connecting room)"
+			+"   use <feature> (unfinished. You can type use oakdoor in the first room and it should take you to a connecting room)\n"
 			+"   use  <item> on <feature>\n"
 			+"   inventory\n")
 	
@@ -996,7 +1000,12 @@ def main(stdscr):
 		else:
 			name = str(cwd) + "/" + type + "Names/" + value + ".txt"
 			pic = str(cwd) + "/" + type + "Pics/" + value + ".txt"
-			text = str(cwd) + "/" + type + "Descriptions/" + value + ".txt"
+			#code for short room descriptions
+			if type == "room" and value != "start" and roomsVisited[str(value)]:
+					text = str(cwd) + "/" + type + "Descriptions/" + value + "short.txt"
+			else:
+				roomsVisited[str(value)] = True
+				text = str(cwd) + "/" + type + "Descriptions/" + value + ".txt"
 				
 			#clear windows and set up borders
 			captionWin.clear()
