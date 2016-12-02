@@ -508,7 +508,7 @@ def look(command, words):
 	for feature in features:
 		if (lookAt == feature.name):
 			if feature.room == player.curRoom:
-			#conditional cases#####
+				#conditional cases#####
 				if (lookAt == 'bedroomdoor'):
 					items.append(brains)
 				if (lookAt == 'jar1'):
@@ -517,8 +517,10 @@ def look(command, words):
 					items.append(goldcoin)
 				if (lookAt == 'woman'):
 					items.append(knife)
+				if (lookAt == 'pinkdoor' or lookAt == 'greendoor' or lookAt == 'golddoor' or lookAt == 'purpledoor' or lookAt == 'yellowdoor'):
+					return "message", "Type use to use these doors"
 				#######################
-
+				
 				return "feature", lookAt
 					
 	
