@@ -770,6 +770,9 @@ def use(command, words):
 								#return "room", rooms[player.curRoom].fname
 						return "message",  "It's locked.. However you do notice a small keyhole. Surely there must be a key somewhere?"
 					else: #player uses the door. they go to the new room
+						if (player.inFight == True):
+-							if(random.randint(0, 4) == 1):
+-								return "message", "before you can escape, the reaper teleports in front of you. You fail to escape the room!"
 						player.changeRooms(feat.conn) 
 						player.pTurn = True
 						player.inFight = False
