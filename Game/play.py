@@ -19,6 +19,7 @@ from room import Room
 from room import readFile
 from thesaurus import validateWord
 import time
+import sys
 
 ########################################CODE FROM PLAY.PY#####################################
 
@@ -150,9 +151,6 @@ phDoor8 = DoorFeature("diamonddoor", "", 6, 1, False)
 phDoor9 = DoorFeature("xdoor", "", 1, 7, False)
 phDoor10 = DoorFeature("xdoor", "", 7, 1, False)
 
-phDoor11 = DoorFeature("pentagramdoor", "", 8, 9, False)
-phDoor12 = DoorFeature("pentagramdoor", "", 9, 8, False)
-
 statue = PuzzFeature("statue", "", 3, 8)
 ladder = DoorFeature("ladder", "", 8, 3, False)
 
@@ -204,8 +202,6 @@ features.append(phDoor7)
 features.append(phDoor8)
 features.append(phDoor9)
 features.append(phDoor10)
-features.append(phDoor11)
-features.append(phDoor12)
 features.append(statue)
 features.append(ladder)
 features.append(gargoyle)
@@ -936,13 +932,22 @@ def main(stdscr):
 	cwd = os.getcwd()
 	
 	stdscr.clear()
-
+		
 	curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
 	curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
 	curses.init_pair(3, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
 	curses.init_pair(4, curses.COLOR_BLUE, curses.COLOR_BLACK)
 	curses.init_pair(5, curses.COLOR_YELLOW, curses.COLOR_BLACK)
 
+	#display screen settings on user's first visit
+	if (not os.path.isfile("visited.txt")):
+		with open("visited.txt", "w") as writeFile:
+			writeFile.write("visited")
+		stdscr.addstr(3, 3, "Screen Size: Height = 44 lines, Width = 155 characters.\n   Best played in fullscreen\n   Press any key to exit", curses.color_pair(1))
+		stdscr.refresh()
+		stdscr.getch()
+		sys.exit()
+		
 	MAX_LINES = 15
 
 	beginX = curses.COLS / 2 - 20
