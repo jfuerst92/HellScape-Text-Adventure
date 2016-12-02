@@ -18,6 +18,7 @@ from feature import ChestFeature
 from room import Room
 from room import readFile
 from thesaurus import validateWord
+import time
 
 ########################################CODE FROM PLAY.PY#####################################
 
@@ -208,6 +209,16 @@ features.append(lever2)
 features.append(lever3)
 features.append(chest)
 features.append(message)
+
+###################STATIC VARIABLES FOR ANIMATIONS################
+WORKING_BRAIN_MESSAGE = "Your brain starts to steam and then begins to pulse"
+
+WORKING_BRAIN_PIC_FILES = ["itemPics/brains.txt", "itemPics/workingbrain.txt"]
+
+WORKING_BRAIN_COLOR_ARRAY = [2, 3]
+
+
+##################################################################
 
 #################List to check rooms visited#######################
 roomsVisited = {}
@@ -766,7 +777,7 @@ def use(command, words):
 											if (spirit in player.getInventory()) and (heart in player.getInventory()):
 												return "room", "goodending";
 											else:
-												return "message", "Your brain starts to steam and then begins to pulse"
+												return "specialmessage", "workingbrain"
 					else:
 						return useItem(item2, None)
 			 return "error", "You do not have such an item.\n"
@@ -878,6 +889,25 @@ def message(textScreen, picScreen, message):
 	textScreen.refresh()
 	picScreen.refresh()
 
+#Function that displays animations
+#picFiles is an array of picture.txt files
+#colorArray is an integer array corresponding to the color_pairs to change the pic to
+def specialMessage(textScreen, picScreen, message, picFiles, colorArray, MAX_LINES):
+	textScreen.clear()
+	textScreen.addstr(3, 1, message, curses.color_pair(4))
+	
+	numPics = len(picFiles)
+	picIndex = 0
+	for i in range(10):
+		picScreen.clear()
+		printFile(picFiles[picIndex], picScreen, 1, 1, colorArray[picIndex], MAX_LINES)
+		textScreen.refresh()
+		picScreen.refresh()
+		time.sleep(.4)
+		picIndex = (picIndex + 1) % numPics
+
+
+	
 def printInventory(nameScreen, picScreen, textScreen, invString):
 		nameScreen.clear()
 		nameScreen.border(0)
@@ -996,7 +1026,10 @@ def main(stdscr):
 
 		elif type == "inventory":
 			printInventory(captionWin, picWin, textWin,value)
-			
+		
+		elif type == "specialmessage":
+			if value == "workingbrain":
+				specialMessage(textWin, picWin, WORKING_BRAIN_MESSAGE, WORKING_BRAIN_PIC_FILES, WORKING_BRAIN_COLOR_ARRAY, MAX_LINES)
 		else:
 			name = str(cwd) + "/" + type + "Names/" + value + ".txt"
 			pic = str(cwd) + "/" + type + "Pics/" + value + ".txt"
