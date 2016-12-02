@@ -63,3 +63,37 @@ class LookFeature(Feature):
 		self.desc = desc
 		self.room = room
 		
+class LeverFeature(Feature):
+	def __init__(self, name, desc, room):
+		self.type = "lever"
+		self.name = name
+		self.desc = desc
+		self.room = room
+		self.switched = False
+		
+	def switch(self):
+		if (self.switched == False):
+			self.switched = True
+		else:
+			self.switched = False
+		
+	def getSwitched(self):
+		return self.switched
+		
+		
+class ChestFeature(Feature):
+	def __init__(self, name, desc, room, item):
+		self.type = "chest"
+		self.name = name
+		self.desc = desc
+		self.room = room
+		self.locked = True
+		self.item = item
+		
+	def dropItem(self, rooms):
+		rooms[self.room].items.append(self.item)
+				
+		
+		
+		
+		
