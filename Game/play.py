@@ -136,11 +136,11 @@ yellowdoor1 = DoorFeature('yellowdoor', '', 9, 14, False)
 yellowdoor2 = DoorFeature('yellowdoor', '', 14, 9, False)
 
 #PLACEHOLDER DOORS TO FACILITATE MOVEMENT AROUND THE MAP#
-phDoor = DoorFeature("door1", "", 2, 3, False)
-phDoor2 = DoorFeature("door1", "", 3, 2, False)
+phDoor = DoorFeature("gate", "", 2, 3, False)
+phDoor2 = DoorFeature("gate", "", 3, 2, False)
 
-phDoor3 = DoorFeature("door2", "", 2, 1, False)
-phDoor4 = DoorFeature("door2", "", 1, 2, False)
+phDoor3 = DoorFeature("woodendoor", "", 2, 1, False)
+phDoor4 = DoorFeature("woodendoor", "", 1, 2, False)
 
 phDoor5 = DoorFeature("tdoor", "", 1, 5, False)
 phDoor6 = DoorFeature("tdoor", "", 5, 1, False)
