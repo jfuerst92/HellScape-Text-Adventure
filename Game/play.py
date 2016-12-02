@@ -12,6 +12,8 @@ from feature import DoorFeature
 from feature import PuzzFeature
 from feature import HandFeature
 from feature import LookFeature
+from feature import LeverFeature
+from feature import ChestFeature
 #from feature import getItemList
 from room import Room
 from room import readFile
@@ -58,11 +60,13 @@ rooms[14].items.append(goldcoin)
 heart = Item("junk", "heart", "a beating human heart", 14)
 rooms[14].items.append(heart)
 workingbrain = Item("junk", "workingbrain", "a pulsing human brain", 12)
-rooms[12].items.append(workingbrain)
+#rooms[12].items.append(workingbrain)
 knife = Item("junk", "knife", "a large steak knife", 13)
 rooms[13].items.append(knife)
 heirloom = Item("junk", "heirloom", "a family heirloom", 12)
 rooms[12].items.append(heirloom)
+spirit = Item("junk", "spirit", "a ghostly apparition resembling yourself", 10)
+rooms[10].items.append(spirit)
 
 gem1 = Item("gem", "ruby", "A large gem sits on the floor, covered in dust. Yet it still shines vibrantly, malevolently.", 5)
 rooms[5].items.append(gem1)
@@ -74,18 +78,21 @@ rooms[10].items.append(hotSauce)
 
 armor = Item("defense", "armor", "An old suit of armor that is bursting forth with light. It exudes purity. It looks heavy but is as light as a feather.", -1)
 
+sword = Item("weapon", "sword", "It's a silver sword. Its old, but still quite sharp.", -1)
+
 items = []
 items.append(doru)
 items.append(scroll)
 items.append(relic)
 items.append(key)
 items.append(torch)
-items.append(hotSauce)
+#items.append(hotSauce)
 #items.append(brains)
 items.append(gem1)
 items.append(gem2)
 items.append(gem3)
 items.append(armor)
+items.append(sword)
 
 #add features
 stall = Feature("stall", "", 10)
@@ -133,21 +140,28 @@ phDoor2 = DoorFeature("door1", "", 3, 2, False)
 phDoor3 = DoorFeature("door2", "", 2, 1, False)
 phDoor4 = DoorFeature("door2", "", 1, 2, False)
 
-phDoor5 = DoorFeature("door3", "", 1, 5, False)
-phDoor6 = DoorFeature("door3", "", 5, 1, False)
+phDoor5 = DoorFeature("tdoor", "", 1, 5, False)
+phDoor6 = DoorFeature("tdoor", "", 5, 1, False)
 
-phDoor7 = DoorFeature("door4", "", 1, 6, False)
-phDoor8 = DoorFeature("door4", "", 6, 1, False)
+phDoor7 = DoorFeature("diamonddoor", "", 1, 6, False)
+phDoor8 = DoorFeature("diamonddoor", "", 6, 1, False)
 
-phDoor9 = DoorFeature("door5", "", 1, 7, False)
-phDoor10 = DoorFeature("door5", "", 7, 1, False)
+phDoor9 = DoorFeature("xdoor", "", 1, 7, False)
+phDoor10 = DoorFeature("xdoor", "", 7, 1, False)
 
 statue = PuzzFeature("statue", "", 3, 8)
 ladder = DoorFeature("ladder", "", 8, 3, False)
 
 gargoyle = HandFeature("gargoyle", "", 6, armor)
 
+lever1 = LeverFeature("lever", "", 5)
+lever2 = LeverFeature("lever", "", 6)
+lever3 = LeverFeature("lever", "", 7)
+			
+			
+chest = ChestFeature("chest", "", 1, sword)
 
+message = LookFeature("message", "", 2)
 
 features = []
 features.append(stall)
@@ -189,6 +203,11 @@ features.append(phDoor10)
 features.append(statue)
 features.append(ladder)
 features.append(gargoyle)
+features.append(lever1)
+features.append(lever2)
+features.append(lever3)
+features.append(chest)
+features.append(message)
 #########################BOOLEANS FOR STATE CHECKS#################
 			
 brainsInBowl = False
@@ -199,7 +218,7 @@ hotSauceInBowl = False
 
 reaper = Reaper(2)
 #The current game dictionary. It recognizes these words. 
-verbs = ['look', 'touch', 'go', 'help', 'pull', 'use', 'pickup', 'pick', 'drop', 'combine', 'inventory', 'search', 'whatroom', 'rTurn']
+verbs = ['look', 'touch', 'go', 'help', 'pull', 'use', 'pickup', 'pick', 'drop', 'combine', 'inventory', 'search', 'whatroom', 'rTurn', 'open']
 
 ######################################
 #Create dictionaries of items and verbs to use with thesaurus api
@@ -301,6 +320,10 @@ def interpret(command, verbDic):
 			return pickup(command, words)
 		elif (command[0] == "drop"):
 			return drop(command, words)
+		elif (command[0] == "pull"):
+			return pull(command, words)
+		elif (command[0] == "open"):
+			return openChest(command, words)
 		elif (command[0] == "go"):
 			return go(command, words)
 		elif (command[0] == "inventory"):
@@ -346,6 +369,12 @@ def fightInterpret(command, verbDic):
 		elif (command[0] == "use"):
 			switchTurn()
 			return use(command, words)
+		elif (command[0] == "pull"):
+			switchTurn()
+			return pull(command, words)
+		elif (command[0] == "open"):
+			switchTurn()
+			return openChest(command, words)
 		elif (command[0] == "search"):
 			return search()
 		
@@ -359,20 +388,23 @@ def fightInterpret(command, verbDic):
 #------------------------------------------------------------------------------------------------------------------------------------------------------ 
 def help():
 	helpString = ("Available commands by verb:\n"
-			+"look\n"
-			+ "look at <item>"
-			+"pick up <item> / pickup <item>\n"
-			+"drop <item>\n"
-			+"go <room> (currently unfinished)\n"
-			  	+ "Use <feature> (unfinished. You can type use oakdoor in the first room and it should take you to a connecting room)"
-			+"inventory\n")
+			+"   look\n"
+			+"   look at <item>\n"
+			+"   look <feature>\n"
+			+"   look inventory\n"
+			+"   pick up <item> / pickup <item>\n"
+			+"   drop <item>\n"
+			+"   go <room> (currently unfinished)\n"
+			+"   use <feature> (unfinished. You can type use oakdoor in the first room and it should take you to a connecting room)"
+			+"   use  <item> on <feature>\n"
+			+"   inventory\n")
 	
 	
 	return "message", helpString
  
 #-------------------------------------------------------------------------------------------------------------------------------------------------------
 # Function: checkPlayerHealth
-# This function prints a list of the items in user inventory to screen.
+# Checks the status of player health
 # User input: None
 #------------------------------------------------------------------------------------------------------------------------------------------------------ 
 def checkPlayerHealth():
@@ -381,6 +413,16 @@ def checkPlayerHealth():
 	else:
 		return False
  
+ #-------------------------------------------------------------------------------------------------------------------------------------------------------
+# Function: checkPlayerHealth
+# Checks the status of player health
+# User input: None
+#------------------------------------------------------------------------------------------------------------------------------------------------------ 
+def getHealth():
+	if (player.health > 0):
+		return True
+	else:
+		return False
  
 #-------------------------------------------------------------------------------------------------------------------------------------------------------
 # Function: inventory
@@ -503,6 +545,12 @@ def pickup(command, words): #the player object should be passed into the constru
 			if checkItemInRoom(item) == True:
 				player.addItem(item) #This function adds the item to the players inventory
 				rooms[player.curRoom].removeItem(item)
+				
+				###check for good ending####
+				if tItem == "heart" or tItem == "workingbrain" or tItem == "spirit":
+					if (heart in player.getInventory()) and (spirit in player.getInventory()) and (workingbrain in player.getInventory()):
+						return "room", "goodending"
+						
 				return "message",  "You pick up the " + item.name + " and put it away in your bag."
 	return "error", "You look but you do not see this item anywhere in the room."
 	
@@ -544,9 +592,63 @@ def drop(command, words): #the player object should be passed into the construct
 				  
 	return "error", "You you do not have such an item do drop."
 	
+#-------------------------------------------------------------------------------------------------------------------------------------------------------
+# Function: pull
+# used to pull levers
+# User input: pull <feature>
+#------------------------------------------------------------------------------------------------------------------------------------------------------
+
+def pull(command, words):	
+	if (words == 1):
+		return "error", "You must indicate an item to drop"
+	
+	tFeat = ""
+	for feat in features:
+		if (command[1] == feat.name and checkFeatInRoom(feat)):
+			tFeat = command[1]
+			if (feat.type == "lever"):
+				feat.switch()
+				if (feat.getSwitched() == True):
+					return "message", "you pulled the lever up. Gears can be heard moving someplace else."
+				else:
+					return "message", "you pulled the lever down. Gears can be heard moving someplace esle."
+			else:
+				return "message", "try as you might, you cannot pull it down."
+	return "message", "You cannot find what you are seeking."
 	
 	
+#-------------------------------------------------------------------------------------------------------------------------------------------------------
+# Function: open
+# used to open chests
+# User input: open <feature>
+#------------------------------------------------------------------------------------------------------------------------------------------------------
+
+def openChest(command, words):	
+	if (words == 1):
+		return "error", "You must indicate an item to drop"
+	tFeat = ""
+	for feat in features:
+		if ((command[1] == feat.name) and (checkFeatInRoom(feat))):
+			tFeat = command[1]
+			if (feat.type == "chest"):
+				if (checkLevers()):
+					feat.dropItem(rooms)
+					rooms[1].items.append(sword)
+					return "message", "The  correct combination of switches caused the chest to click open Inside you see sword, buried under musty rags and wrappings."
+				else:
+					return "message", "The chest won't open. You notice the locking mechanism connects to a gear going into the wall."
+			else:
+				return "message", "try as you might, you cannot pull it down."
 	
+	return "message", "You cannot find what you are seeking."
+
+	
+def checkLevers():
+	if ((lever1.switched == False) and (lever2.switched == True) and (lever3.switched == True)):
+		return True
+	else:
+		return False
+
 #-------------------------------------------------------------------------------------------------------------------------------------------------------
 # Function: go
 # This function ahs the user go to a new room. This isnt final, because the user may not know the names of the connecting rooms, but 
@@ -641,12 +743,26 @@ def use(command, words):
 				if (tItem == item2.name):
 					#return "message", "You use the " + item2.name + " in your inventory\n"
 					if (len(command) > 2):
-						if (command[2] == "on"): #player is using an item on something else
+						if (command[2] == "on" and len(command) > 3): #player is using an item on something else
 							for feat in features:
-								if (command[3] ==feat.name):
+								if (command[3] == feat.name):
 									if (feat.room == player.curRoom):
 										tFeat = command[3]
 										return useItem(item2, feat)
+										
+							for secItem in items:
+								if (command[3] == secItem.name):
+									if secItem in player.getInventory():
+										if (item2.name == "hotSauce" and secItem.name == "brains") or (item2.name == "brains" and secItem == "hotSauce"):
+											player.dropItem(hotSauce)
+											player.dropItem(brains)
+											rooms[player.curRoom].items.append(workingbrain)
+											player.addItem(workingbrain)
+											##check for good ending condition##
+											if (spirit in player.getInventory()) and (heart in player.getInventory()):
+												return "room", "goodending";
+											else:
+												return "message", "Your brain starts to steam and then begins to pulse"
 					else:
 						return useItem(item2, None)
 			 return "error", "You do not have such an item.\n"
@@ -688,6 +804,29 @@ def useItem(item, feature):
 		rooms[6].items.append(armor)
 		armor.curRoom = 6
 		return "message", "You press the scroll against the palm of the gargoyles hand. The statue briefly comes to life, before shattering, revealing a shining set of armor on the ground.\n"
+	
+	###############handle conditional cases###############
+	if item.name == "goldcoin" and feature.name == "stall":
+		player.dropItem(item)
+		items.append(hotSauce)
+		player.addItem(hotSauce)
+		return "message", "You have bought the hot sauce"
+	
+	if item.name == "knife" and feature.name == "table":
+		player.dropItem(item)
+		items.append(heirloom)
+		return "message", "An old pocketwatch appears on your plate"
+		
+	if item.name == "heirloom" and feature.name == "grave":
+		player.dropItem(item)
+		items.append(spirit)
+		player.addItem(spirit)
+		if (heart in player.getInventory()) and (workingbrain in player.getInventory()):
+			return "room", "goodending"
+		else:
+			return "message", "A ghost rises from the grave and begins to follow you"
+	########################################################
+	
 	return "error", "invalid action (or not yet  implemented)"
  
 def initiateFight():
