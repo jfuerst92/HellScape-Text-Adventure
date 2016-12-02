@@ -33,7 +33,7 @@ class Player(object):
 		self.space -= 1
 		
 	def invHasSpace(self):
-		if (self.space < 2):
+		if (self.space < 4):
 			return True
 		else:
 			return False
