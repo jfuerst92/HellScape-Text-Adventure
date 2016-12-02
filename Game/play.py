@@ -20,7 +20,7 @@ from room import readFile
 from thesaurus import validateWord
 import time
 import sys
-
+import random
 ########################################CODE FROM PLAY.PY#####################################
 
 rooms = readFile()
@@ -151,6 +151,8 @@ phDoor8 = DoorFeature("diamonddoor", "", 6, 1, False)
 phDoor9 = DoorFeature("xdoor", "", 1, 7, False)
 phDoor10 = DoorFeature("xdoor", "", 7, 1, False)
 
+phDoor11 = DoorFeature("pentagramdoor", "", 8, 9, False)
+phDoor12 = DoorFeature("pentagramdoor", "", 9, 8, False)
 statue = PuzzFeature("statue", "", 3, 8)
 ladder = DoorFeature("ladder", "", 8, 3, False)
 
@@ -202,6 +204,8 @@ features.append(phDoor7)
 features.append(phDoor8)
 features.append(phDoor9)
 features.append(phDoor10)
+features.append(phDoor11)
+features.append(phDoor12)
 features.append(statue)
 features.append(ladder)
 features.append(gargoyle)
@@ -753,6 +757,9 @@ def use(command, words):
 								#return "room", rooms[player.curRoom].fname
 						return "message",  "It's locked.. However you do notice a small keyhole. Surely there must be a key somewhere?"
 					else: #player uses the door. they go to the new room
+						if (player.inFight == True):
+							if(random.randint(0, 4) == 1):
+								return "message", "before you can escape, the reaper teleports in front of you. You fail to escape the room!"
 						player.changeRooms(feat.conn) 
 						player.pTurn = True
 						player.inFight = False
