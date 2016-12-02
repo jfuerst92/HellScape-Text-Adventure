@@ -238,7 +238,7 @@ for room in rooms:
 
 reaper = Reaper(2)
 #The current game dictionary. It recognizes these words. 
-verbs = ['look', 'touch', 'go', 'help', 'pull', 'use', 'pickup', 'pick', 'drop', 'combine', 'inventory', 'search', 'whatroom', 'rTurn', 'open', 'history']
+verbs = ['look', 'go', 'help', 'pull', 'use', 'pickup', 'pick', 'drop', 'combine', 'inventory', 'search', 'whatroom', 'rTurn', 'open', 'history']
 
 ######################################
 #Create dictionaries of items and verbs to use with thesaurus api
@@ -259,7 +259,7 @@ for item in items:
 
 #
 def whatRoom():
-	return "message", "You are in room " + str(player.curRoom) + ".\n"
+	return "message", "You are in room " +  rooms[player.curRoom].fname + ".\n"
 	
 def checkItemInRoom(item):
 	
