@@ -1,8 +1,11 @@
 # HellScape
 
 Authors:
+
 Joe Fuerst
+
 Chris King
+
 Osbaldo Esquivel
 
 This is a text adventure game written in python. It takes place in an adaptation of Dante Alighieri's version of hell. You wake up, not knowing why you are not in hell, and you must search through the various planes of hell in order to solve puzzles and overcome obstacles, including the Grim Reaper, who moves around hell searching for you.
