@@ -1,27 +1,3 @@
 With all of these files in one direcroty simply run: python play.py
 
-It runs, but is missing a lot of features. rooms are initialized, player, reaper, items are set. features are not implemented yet.
 
-Currently supported commands include:
-
-look
-
-look <item>
-
-look <feature>
-
-pickup <item>
-
-drop <item>
-
-go <room>
-
-you'll need to look at the code to find out what items are in what room. there is a doru in the room the player starts in, so you 
-can experiment with that item immediately
-
-all rooms still have the placeholder text until that gets changed, so you can only type go Limbo and it will take you to another
-room that is adjacent. This needs refining, since the player will probably not know the names of the adjecent rooms. THe user will
-probably have to interact with a feature like a door in order to change rooms, but thats something for later.
-
-Beyond this, we can simply start adding features on to this, unless there's some critical gameplay functionality that wont work with
-this. If so, let me know and we can rework it. No support for the animation stuff yet. I figure that will be the next step.
